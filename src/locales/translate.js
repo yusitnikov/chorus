@@ -10,7 +10,15 @@ const substituteArgs = (messageId, ...args) => {
     return messageId;
 };
 
-export const translate = (messageId, ...args) => substituteArgs(phrasesById[messageId] && phrasesById[messageId][getCurrentLocaleCode()] || messageId, ...args);
+export const translate = (messageId, ...args) => {
+    const translations = phrasesById[messageId];
+
+    if (!translations) {
+        console.warn(`Warning: translation is missing for the phrase "${messageId}"`);
+    }
+
+    return substituteArgs(translations && translations[getCurrentLocaleCode()] || messageId, ...args);
+}
 
 export const translatePlural = (n, messageIdSingle, messageIdPlural, ...args) => {
     let messageIdForms = translate(messageIdSingle);
