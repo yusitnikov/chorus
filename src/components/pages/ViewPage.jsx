@@ -23,7 +23,8 @@ export const ViewPage = () => {
     // The first part of the URL is not a projectId by mistake
     const actualProjectId = source && getProjectIdByEntry(source);
     if (actualProjectId && actualProjectId !== projectId) {
-        redirectTo ||= `/view/${actualProjectId}/${projectId}`;
+        // noinspection PointlessBooleanExpressionJS
+        redirectTo = redirectTo || `/view/${actualProjectId}/${projectId}`;
     }
 
     const isProject = source && isProjectSourceEntry(source);
@@ -40,7 +41,7 @@ export const ViewPage = () => {
     // The second part of the URL is an entry that doesn't belong to this project
     const actualProjectId2 = entry && getProjectIdByEntry(entry);
     if (actualProjectId2 && actualProjectId2 !== projectId) {
-        redirectTo ||= `/view/${actualProjectId2}/${entryIdStr}`;
+        redirectTo = redirectTo || `/view/${actualProjectId2}/${entryIdStr}`;
     }
 
     const [projectEntries, projectEntriesLoaded] = useLoadProjectEntries(source);

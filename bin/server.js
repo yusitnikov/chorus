@@ -72,7 +72,7 @@ const processCompilationRequest = async(entryId, request, response) => {
     }
 
     let {replies} = await loadProjectEntries(source);
-    if (!replies) {
+    if (!replies.length) {
         console.log("    There are no replies yet, skipping");
         return;
     }
