@@ -32,6 +32,11 @@ export const ViewPage = () => {
     const entryId = entryIdStr === "result"
         ? source && getProjectCompilationId(source)
         : (entryIdStr || projectId);
+
+    if (source && !entryId) {
+        redirectTo = redirectTo || `/view/${projectId}`;
+    }
+
     const entryIdToLoad = (redirectTo || entryId === projectId) ? "" : entryId;
     let [entry, entryLoaded] = useLoadMediaById(entryIdToLoad);
     if (entryId && !entryIdToLoad) {
