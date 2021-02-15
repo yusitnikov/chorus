@@ -1,0 +1,23 @@
+.LanguageSelectionScreen__Attribution {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+.LanguageSelectionScreenItem {
+    display: inline-block;
+}
+.ltr .LanguageSelectionScreenItem {
+    margin-right: 50px;
+}
+.rtl .LanguageSelectionScreenItem {
+    margin-left: 50px;
+}
+
+.LanguageSelectionScreenItem:last-child {
+    margin-right: 0;
+}
+
+.LanguageSelectionScreenItem__Text {
+    font-size: 30px;
+}

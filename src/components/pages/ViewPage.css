@@ -1,0 +1,12 @@
+.ltr .ViewPage__ReplyLink {
+    margin-left: 50px;
+}
+.rtl .ViewPage__ReplyLink {
+    margin-right: 50px;
+}
+
+@media (min-width: 1200px) {
+    .ViewPage__content {
+        display: flex;
+    }
+}

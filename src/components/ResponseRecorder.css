@@ -1,0 +1,9 @@
+.ResponseRecorder__Recorder__Done {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+}
+
+.ResponseRecorder__Recorder__Done a.link {
+    color: white !important;
+}

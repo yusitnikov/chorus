@@ -1,0 +1,123 @@
+.rtl {
+    direction: rtl;
+}
+
+.ltr {
+    direction: ltr;
+}
+
+.float-right {
+    float: right;
+}
+.rtl .float-right {
+    float: left;
+}
+
+.block {
+    display: block;
+    margin: 0 0 10px 0;
+}
+
+.inline-block {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 20px 10px 0;
+}
+.rtl .inline-block {
+    margin: 0 0 10px 20px;
+}
+
+.block:last-child,
+.inline-block:last-child,
+.rtl .inline-block:last-child {
+    margin: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.inline-flex,
+.inline-block.flex {
+    display: inline-flex;
+}
+
+.flex-hcenter {
+    justify-content: center;
+}
+
+.flex-vcenter {
+    align-items: center;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.no-mouse {
+    pointer-events: none;
+}
+.mouse {
+    pointer-events: all;
+}
+
+.border-radius {
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.gray-borders {
+    border: 1px solid #ccc;
+}
+
+.input-padding {
+    padding: 5px 10px;
+}
+
+.transparent-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+.single-line {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+a {
+    color: black;
+}
+
+a.link {
+    color: #00f;
+}
+a.link:hover,
+a.link:active,
+a.link:focus {
+    color: #88f;
+}
+
+.nav-link {
+    display: inline-block;
+    margin: 5px 10px;
+    text-decoration: none;
+}
+.nav-link.active {
+    text-decoration: underline;
+}
