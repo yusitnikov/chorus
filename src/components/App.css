@@ -15,6 +15,10 @@
 
 .block {
     display: block;
+}
+
+.block,
+.block-margin {
     margin: 0 0 10px 0;
 }
 
@@ -104,12 +108,13 @@ a {
     color: black;
 }
 
-a.link {
+.link {
     color: #00f;
+    cursor: pointer;
 }
-a.link:hover,
-a.link:active,
-a.link:focus {
+.link:hover,
+.link:active,
+.link:focus {
     color: #88f;
 }
 
@@ -120,4 +125,9 @@ a.link:focus {
 }
 .nav-link.active {
     text-decoration: underline;
+}
+
+ol,
+ul {
+    margin: 0;
 }
