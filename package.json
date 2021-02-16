@@ -1,6 +1,7 @@
 {
   "name": "recordchorus",
   "version": "0.1.0",
+  "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.12.16",
     "@babel/node": "^7.12.16",
