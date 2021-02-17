@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import "./ViewPage.css";
 
@@ -13,9 +13,16 @@ import {
 import {translate, translatePlural, translateWithContext} from "../../locales/translate";
 import {useLoadMediaById} from "../../models/Media";
 import {PageNotFound} from "../errors/PageNotFound";
+import {CopyToClipboardInput} from "../CopyToClipboardInput";
+import {getCurrentLocaleCode} from "../../locales/currentLocale";
+import {isRecentlyCreatedProject} from "../../sharedData/recentlyCreatedProjects";
+import {SourceRecorderInstructions, SourceRecorderInstructionsCompilationNote} from "../SourceRecorder";
 
 export const ViewPage = () => {
     const {projectId, entryId: entryIdStr} = useParams();
+
+    const [projectLinkCopied, setProjectLinkCopied] = useState(false);
+    const [replyLinkCopied, setReplyLinkCopied] = useState(false);
 
     let redirectTo = null;
 
@@ -54,8 +61,22 @@ export const ViewPage = () => {
         redirectTo = redirectTo || `/view/${actualProjectId2}/${entryIdStr}`;
     }
 
-    const [projectEntries, projectEntriesError, projectEntriesLoaded] = useLoadProjectEntries(source);
+    const [projectEntries] = useLoadProjectEntries(source);
     const {compilation, replies = []} = projectEntries || {};
+
+    const isNewProject = isRecentlyCreatedProject(projectId);
+
+    const allLoaded = sourceLoaded && entryLoaded;
+    const isError = sourceError || redirectTo;
+
+    const preventClose = allLoaded && !isError && isNewProject && !projectLinkCopied;
+    useEffect(() => {
+        if (preventClose) {
+            window.onbeforeunload = () => "";
+
+            return () => window.onbeforeunload = null;
+        }
+    }, [preventClose]);
 
     if (sourceError) {
         return <PageNotFound title={translate("Project not found")}/>;
@@ -65,7 +86,7 @@ export const ViewPage = () => {
         return <Redirect to={redirectTo}/>;
     }
 
-    if (!entryLoaded || !sourceLoaded) {
+    if (!allLoaded) {
         return null;
     }
 
@@ -76,33 +97,71 @@ export const ViewPage = () => {
     return (
         <>
             <h1 className={"block"}>
-                {source.name} - {names[entryId] || translateWithContext("Reply", "noun")}
+                {source.name}{isProject && ` - ${names[entryId] || translateWithContext("Reply", "noun")}`}
 
                 {isProject && <Link to={`/reply/${projectId}`} className={"ViewPage__ReplyLink link"}>
                     {translateWithContext("Reply", "verb")}
                 </Link>}
             </h1>
 
+            {isNewProject && <SourceRecorderInstructions
+                fulfilledSteps={{
+                    1: true,
+                    2: true,
+                    3: projectLinkCopied,
+                    4: replyLinkCopied,
+                }}
+            />}
+
+            {!isNewProject && <SourceRecorderInstructionsCompilationNote/>}
+
             <div className={"ViewPage__content"}>
                 <div className={"inline-block"}>
                     <Player entry={entry}/>
                 </div>
 
-                {isProject && projectEntriesLoaded && !projectEntriesError && <div className={"inline-block"}>
+                <div className={"inline-block"}>
                     <h2 className={"block"}>
-                        {translatePlural(relatedEntries.length, "%u related video", "%u related videos")}
+                        {translate("Share")}
                     </h2>
 
-                    <div className={"block"}>
-                        <MediaList
-                            projectId={projectId}
-                            compilationId={compilation?.id}
-                            items={relatedEntries}
-                            customNameCallback={item => names[item.id]}
-                        />
-                    </div>
-                </div>}
+                    <ViewPageLinkShare
+                        label={translate("Link to the project:")}
+                        url={window.location.href}
+                        onCopy={() => setProjectLinkCopied(true)}
+                    />
+
+                    <ViewPageLinkShare
+                        label={translate("Reply link:")}
+                        url={`${window.location.origin}/#/reply/${projectId}`}
+                        onCopy={() => setReplyLinkCopied(true)}
+                    />
+
+                    {relatedEntries.length !== 0 && <>
+                        <h2 className={"block"}>
+                            {translatePlural(relatedEntries.length, "%u related video", "%u related videos")}
+                        </h2>
+
+                        <div className={"block"}>
+                            <MediaList
+                                projectId={projectId}
+                                compilationId={compilation?.id}
+                                items={relatedEntries}
+                                customNameCallback={item => names[item.id]}
+                            />
+                        </div>
+                    </>}
+                </div>
             </div>
         </>
     );
 };
+
+const ViewPageLinkShare = ({label, url, onCopy}) => (
+    <CopyToClipboardInput
+        text={url}
+        label={label}
+        labelWidth={getCurrentLocaleCode() === "he" ? 110 : 160}
+        onCopy={onCopy}
+    />
+);

@@ -31,6 +31,14 @@
     margin: 0 0 10px 20px;
 }
 
+.inline-margin {
+    display: inline;
+    margin: 0 20px 0 0;
+}
+.rtl .inline-margin {
+    margin: 0 0 0 20px;
+}
+
 .block:last-child,
 .inline-block:last-child,
 .rtl .inline-block:last-child {
@@ -52,6 +60,11 @@
 
 .flex-vcenter {
     align-items: center;
+}
+
+.align-top,
+.align-children-top > * {
+    vertical-align: top;
 }
 
 .relative {
@@ -91,6 +104,10 @@
 
 .input-padding {
     padding: 5px 10px;
+}
+
+.vertical-input-padding {
+    padding: 5px 0;
 }
 
 .transparent-overlay {

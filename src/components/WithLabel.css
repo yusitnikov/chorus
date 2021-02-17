@@ -1,10 +1,3 @@
 .WithLabel {
-    display: flex !important;
-}
-
-.ltr .WithLabel__Label {
-    margin-right: 20px;
-}
-.rtl .WithLabel__Label {
-    margin-left: 20px;
+    display: inline-flex !important;
 }

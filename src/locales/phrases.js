@@ -57,9 +57,32 @@ export const phrasesById = {
         ru: "Ответ",
         he: "תגובה",
     },
+    "Share": {
+        ru: "Поделиться",
+        he: "לשתף",
+    },
+    "Link to the project:": {
+        ru: "Ссылка на проект:",
+        he: "קישור לפרויקט:",
+    },
+    "Reply link:": {
+        ru: "Ссылка для ответа:",
+        he: "קישור תגובה:",
+    },
     "%u related video": {
         ru: ["%u связанное видео", "%u связанных видео", "%u связанных видео"],
         he: ["%u סרטון קשור", "%u סרטונים קשורים"],
+    },
+    // endregion
+
+    // region CopyToClipboardButton
+    "Copy": {
+        ru: "Копировать",
+        he: "להעתיק",
+    },
+    "Copied.": {
+        ru: "Скопировано.",
+        he: "הועתק.",
     },
     // endregion
 
@@ -94,6 +117,10 @@ export const phrasesById = {
     "That's how you do it:": {
         ru: "Вот как это делается:",
         he: "ככה עושים את זה:",
+    },
+    "Great, just a little bit left:": {
+        ru: "Отлично, осталось совсем чуть-чуть:",
+        he: "נהדר, נשאר רק קצת",
     },
     "Step %1": {
         ru: "Шаг %1",
@@ -144,12 +171,16 @@ export const phrasesById = {
         he: "שמרו את הקישור לפרויקט שלכם. אין דף עם רשימת הפרויקטים שנוצרו לאחרונה, כך שתוכלו לגשת לפרויקט רק באמצעות הקישור הישיר.",
     },
     "Share the reply link with people that you want to record replies to your video.": {
-        ru: "Поделитесь ссылкой на ответ с людьми, от которых вы хотите, чтоб они записали ответ на ваше видео.",
+        ru: "Поделитесь ссылкой для ответа с людьми, от которых вы хотите, чтоб они записали ответ на ваше видео.",
         he: "שתפו את קישור התגובה עם אנשים שתרצו שיקליטו תגובות לסרטון שלכם.",
     },
-    "All replies and the source recording will be automatically compiled into 1 video of everyone singing together after submitting each reply. Note: it may take time to process the videos (seconds or minutes, depending on the video length and quality).": {
-        ru: "Все ответы и исходная запись будут автоматически скомпилированы в 1 видео, в котором все будут петь вместе, после отправки каждого ответа. Примечание: для обработки видео требуется время (секунды или минуты, в зависимости от длины и качества видео).",
-        he: "כל התשובות והקלטת המקור יורכבו אוטומטית לסרטון אחד של כולם שרים יחד לאחר הגשת כל תשובה. הערה: לוקח זמן לעבד את הסרטונים (שניות או דקות, תלוי באורך הסרטון ובאיכותו).",
+    "All replies and the source recording will be automatically compiled into 1 video of everyone singing together after submitting each reply.": {
+        ru: "Все ответы и исходная запись будут автоматически скомпилированы в 1 видео, в котором все будут петь вместе, после отправки каждого ответа.",
+        he: "כל התשובות והקלטת המקור יורכבו אוטומטית לסרטון אחד של כולם שרים יחד לאחר הגשת כל תשובה.",
+    },
+    "Note: it may take time to process the videos (seconds or minutes, depending on the video length and quality).": {
+        ru: "Примечание: для обработки видео требуется время (секунды или минуты, в зависимости от длины и качества видео).",
+        he: "הערה: לוקח זמן לעבד את הסרטונים (שניות או דקות, תלוי באורך הסרטון ובאיכותו).",
     },
     "After gathering all replies and waiting for the result video to compile, share the link to the compilation video to the prospect :)": {
         ru: "Собрав все ответы и дождавшись компиляции итогового видео, поделитесь ссылкой на видео компиляции :)",

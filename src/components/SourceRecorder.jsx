@@ -5,6 +5,7 @@ import {translate} from "../locales/translate";
 import {updateMedia} from "../models/Media";
 import {WithLabel} from "./WithLabel";
 import {Error} from "./errors/Error";
+import {addRecentlyCreatedProject} from "../sharedData/recentlyCreatedProjects";
 
 export const SourceRecorder = () => {
     const [state, setState] = useState(null);
@@ -12,6 +13,8 @@ export const SourceRecorder = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
 
     if (entryId && formSubmitted) {
+        addRecentlyCreatedProject(entryId);
+
         return <Redirect to={`/view/${entryId}`}/>;
     }
 
@@ -23,7 +26,7 @@ export const SourceRecorder = () => {
                 {translate("Let's start!")}
             </h3>
 
-            <SourceRecorderInstructions/>
+            <SourceRecorderInstructions fulfilledSteps={{1: entryId}}/>
 
             {!doneRecording && <Recorder onStateChanged={setState} onUploadedEntryIdChanged={setEntryId}/>}
 
@@ -32,16 +35,17 @@ export const SourceRecorder = () => {
     );
 };
 
-const SourceRecorderInstructions = () => {
+export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
     const [expanded, setExpanded] = useState(true);
 
     return (
         <details className={"block"} open={expanded} onToggle={event => setExpanded(event.target.open)}>
             <summary className={"block-margin"}>
-                {translate("That's how you do it:")} <span className={"link"}>({translate(expanded ? "shrink" : "expand")})</span>
+                {fulfilledSteps[1] ? translate("Great, just a little bit left:") : translate("That's how you do it:")}&nbsp;
+                <span className={"link"}>({translate(expanded ? "shrink" : "expand")})</span>
             </summary>
 
-            <WithLabel width={50} label={translate("Step %1", 1)} className={"block"}>
+            <SourceRecorderInstructionsStep step={1} done={fulfilledSteps[1]}>
                 {translate("Record your part of the song. Use the recorder below - hit the red button to start.")} {translate("Some useful tips:")}
                 <ul>
                     <li>{translate("Check the camera/audio settings before you start.")}</li>
@@ -51,32 +55,64 @@ const SourceRecorderInstructions = () => {
                     <li>{translate("Sing loud.")}</li>
                     <li>{translate("Listen to the recording before uploading it, check that everything's all right.")}</li>
                 </ul>
-            </WithLabel>
+            </SourceRecorderInstructionsStep>
 
-            <WithLabel width={50} label={translate("Step %1", 2)} className={"block"}>
+            <SourceRecorderInstructionsStep step={2} done={fulfilledSteps[2]}>
                 {translate("Give a name to your project and submit the form. You will be redirected to the project home page.")}
-            </WithLabel>
+            </SourceRecorderInstructionsStep>
 
-            <WithLabel width={50} label={translate("Step %1", 3)} className={"block"}>
+            <SourceRecorderInstructionsStep step={3} done={fulfilledSteps[3]}>
                 <strong style={{color: "red"}}>{translate("Important!")}</strong> {translate("Save the link to your project. There's no page with the list of recently created projects, so you will be able to access the project only by the direct link.")}
-            </WithLabel>
+            </SourceRecorderInstructionsStep>
 
-            <WithLabel width={50} label={translate("Step %1", 4)} className={"block"}>
+            <SourceRecorderInstructionsStep step={4} done={fulfilledSteps[4]}>
                 <div className={"block"}>
                     {translate("Share the reply link with people that you want to record replies to your video.")}
                 </div>
 
-                <div className={"block"}>
-                    {translate("All replies and the source recording will be automatically compiled into 1 video of everyone singing together after submitting each reply. Note: it may take time to process the videos (seconds or minutes, depending on the video length and quality).")}
-                </div>
-            </WithLabel>
+                <SourceRecorderInstructionsCompilationNote/>
+            </SourceRecorderInstructionsStep>
 
-            <WithLabel width={50} label={translate("Step %1", 5)} className={"block"}>
+            <SourceRecorderInstructionsStep step={5} done={fulfilledSteps[5]}>
                 {translate("After gathering all replies and waiting for the result video to compile, share the link to the compilation video to the prospect :)")}
-            </WithLabel>
+            </SourceRecorderInstructionsStep>
         </details>
     );
 }
+
+export const SourceRecorderInstructionsCompilationNote = () => (
+    <>
+        <div className={"block"}>
+            {translate("All replies and the source recording will be automatically compiled into 1 video of everyone singing together after submitting each reply.")}
+        </div>
+
+        <div className={"block"}>
+            {translate("Note: it may take time to process the videos (seconds or minutes, depending on the video length and quality).")}
+        </div>
+    </>
+);
+
+const SourceRecorderInstructionsStep = ({step, children, done = false}) => (
+    <div className={"block"}>
+        <WithLabel
+            width={70}
+            bold={true}
+            label={<>
+                {translate("Step %1", step)}&nbsp;
+                {done && <span
+                    className={"absolute"}
+                    style={{
+                        color: "#0c0",
+                        marginTop: -3,
+                    }}>
+                    ✓
+                </span>}
+            </>}
+        >
+            {children}
+        </WithLabel>
+    </div>
+);
 
 const SourceRecorderForm = ({entryId, onSubmit}) => {
     const [entryName, setEntryName] = useState("");

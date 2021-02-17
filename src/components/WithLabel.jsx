@@ -2,24 +2,24 @@ import React from "react";
 
 import "./WithLabel.css";
 
-export const WithLabel = ({label, width, className = "", children, ...divProps}) => {
+export const WithLabel = ({label, width, bold = false, className = "", labelClassName = "", children, ...labelProps}) => {
     return (
-        <div
+        <label
             className={`WithLabel ${className}`}
-            {...divProps}
+            {...labelProps}
         >
             <div
-                className={"WithLabel__Label"}
+                className={`WithLabel__Label ${labelClassName}`}
                 style={{
                     width,
                     flex: `0 0 ${width}px`,
                 }}
             >
-                <strong>{label}</strong>
+                {bold ? <strong>{label}</strong> : label}
             </div>
             <div className={"WithLabel__Content"}>
                 {children}
             </div>
-        </div>
+        </label>
     );
 };
