@@ -20,3 +20,5 @@
 1. (it) LogRotate on the server.
 1. (docs) Installation/configuration instructions for this repo
 1. (feat) Show the analytics for the compilation video.
+1. (fix) Install ffmpeg 4.3 locally and on the server
+   and use the "fill" option of the xstack filter to set the background color.
