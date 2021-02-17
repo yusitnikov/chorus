@@ -11,22 +11,15 @@ export const isProjectSourceEntry = (source) => source.adminTags && source.admin
 
 export const getProjectCompilationId = (sourceEntry) => sourceEntry.referenceId;
 
-export const loadProjectEntries = async(source, useCache = false) => {
-    const allEntries = await loadMediaList({parentEntryIdEqual: source.id}, useCache);
-
-    const compilationId = getProjectCompilationId(source);
-
-    const compilation = allEntries.filter(entry => entry.id === compilationId)[0];
-
-    const replies = allEntries.filter(entry => entry.id !== compilationId);
-
-    return {
-        compilation,
-        replies
-    };
-};
-export const useLoadProjectEntries = (source) => useLoader(
-    () => source ? loadProjectEntries(source, true) : immediatePromise(null),
+export const loadProjectReplies = async(source, useCache = false) => await loadMediaList(
+    {
+        parentEntryIdEqual: source.id,
+        idNotIn: getProjectCompilationId(source) || undefined,
+    },
+    useCache
+);
+export const useLoadProjectReplies = (source) => useLoader(
+    () => source ? loadProjectReplies(source, true) : immediatePromise(undefined),
     [source]
 );
 

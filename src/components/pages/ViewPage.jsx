@@ -4,11 +4,11 @@ import "./ViewPage.css";
 
 import {Link, Redirect, useParams} from "react-router-dom";
 import {Player} from "../Player";
-import {MediaList} from "../MediaList";
+import {MediaList, MediaListItem} from "../MediaList";
 import {
     getProjectCompilationId, getProjectEntryNamesMap,
     getProjectIdByEntry, isProjectSourceEntry,
-    useLoadProjectEntries
+    useLoadProjectReplies
 } from "../../models/Project";
 import {translate, translatePlural, translateWithContext} from "../../locales/translate";
 import {useLoadMediaById} from "../../models/Media";
@@ -18,10 +18,11 @@ import {getCurrentLocaleCode} from "../../locales/currentLocale";
 import {isRecentlyCreatedProject} from "../../sharedData/recentlyCreatedProjects";
 import {SourceRecorderInstructions, SourceRecorderInstructionsCompilationNote} from "../SourceRecorder";
 import {Layout} from "../Layout";
-import {absoluteUrl, currentPageUrl, replyUrl, viewProjectUrl} from "../../misc/url";
+import {absoluteUrl, currentPageUrl, mediaEmbedUrl, replyUrl, viewProjectUrl} from "../../misc/url";
 
 export const ViewPage = () => {
-    const {projectId, entryId: entryIdStr} = useParams();
+    let {projectId, entryId} = useParams();
+    entryId = entryId || projectId;
 
     // region All hooks are here
     const [projectLinkCopied, setProjectLinkCopied] = useState(false);
@@ -29,17 +30,16 @@ export const ViewPage = () => {
 
     const [source, sourceError, sourceLoaded] = useLoadMediaById(projectId);
 
-    const entryId = entryIdStr === "result"
-        ? source && getProjectCompilationId(source)
-        : (entryIdStr || projectId);
+    const compilationId = source && getProjectCompilationId(source);
+    const [compilation] = useLoadMediaById(compilationId);
+
     const entryIdToLoad = entryId === projectId ? "" : entryId;
     let [entry, entryError, entryLoaded] = useLoadMediaById(entryIdToLoad);
-    if (entryId && !entryIdToLoad) {
+    if (entryId === projectId) {
         entry = source;
     }
 
-    const [projectEntries] = useLoadProjectEntries(source);
-    const {compilation, replies = []} = projectEntries || {};
+    const [replies = []] = useLoadProjectReplies(source);
 
     const isNewProject = isRecentlyCreatedProject(projectId);
 
@@ -72,7 +72,7 @@ export const ViewPage = () => {
     // The second part of the URL is an entry that doesn't belong to this project
     const actualProjectId2 = entry && getProjectIdByEntry(entry);
     if (actualProjectId2 && actualProjectId2 !== projectId) {
-        return <Redirect to={viewProjectUrl(actualProjectId2, entryIdStr)}/>;
+        return <Redirect to={viewProjectUrl(actualProjectId2, entryId)}/>;
     }
 
     if (sourceError) {
@@ -83,9 +83,9 @@ export const ViewPage = () => {
         return <Layout/>;
     }
 
-    const relatedEntries = [source, ...replies, compilation].filter(entry => entry && entry.id !== entryId);
+    const relatedEntries = [source, ...replies].filter(entry => entry && entry.id !== entryId);
 
-    const names = getProjectEntryNamesMap(projectId, getProjectCompilationId(source), replies);
+    const names = getProjectEntryNamesMap(projectId, compilationId, replies);
 
     return (
         <Layout
@@ -138,9 +138,23 @@ export const ViewPage = () => {
                         <div className={"block"}>
                             <MediaList
                                 projectId={projectId}
-                                compilationId={compilation?.id}
                                 items={relatedEntries}
-                                customNameCallback={item => names[item.id]}
+                                nameCallback={item => names[item.id]}
+                            />
+                        </div>
+                    </>}
+
+                    {compilation && <>
+                        <h2 className={"block"}>
+                            {translate("Compilation")}
+                        </h2>
+
+                        <div className={"block"}>
+                            <MediaListItem
+                                projectId={projectId}
+                                entry={compilation}
+                                url={mediaEmbedUrl(projectId)}
+                                openInNewPage={true}
                             />
                         </div>
                     </>}

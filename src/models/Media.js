@@ -29,7 +29,7 @@ export const loadMediaById = (id, useCache = false) => {
 
     return resultPromise;
 };
-export const useLoadMediaById = (id) => useLoader(() => id ? loadMediaById(id, true) : immediatePromise(null), [id]);
+export const useLoadMediaById = (id) => useLoader(() => id ? loadMediaById(id, true) : immediatePromise(undefined), [id]);
 
 export const loadMediaList = (filter, useCache = false) => {
     const key = JSON.stringify(filter);
@@ -61,7 +61,7 @@ export const loadMediaList = (filter, useCache = false) => {
 
     return objectsPromise;
 };
-export const useLoadMediaList = (filter) => useLoader(() => filter ? loadMediaList(filter) : immediatePromise(null), [JSON.stringify(filter)]);
+export const useLoadMediaList = (filter) => useLoader(() => filter ? loadMediaList(filter) : immediatePromise(undefined), [JSON.stringify(filter)]);
 
 export const addMedia = async(data, contentPath) => {
     clearMediaCache();

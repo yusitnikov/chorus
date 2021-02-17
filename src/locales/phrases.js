@@ -12,6 +12,10 @@ export const phrasesById = {
         ru: "Проект не найден",
         he: "הפרויקט לא נמצא",
     },
+    "Video not found": {
+        ru: "Проект не найдено",
+        he: "הסרטון לא נמצא",
+    },
     "Failed to save the video.": {
         ru: "Не удалось сохранить видео.",
         he: "שמירת הסרטון נכשלה.",

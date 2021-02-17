@@ -7,29 +7,34 @@ import {viewProjectUrl} from "../misc/url";
 const itemWidth = 160;
 const itemHeight = itemWidth * playerAspectRatio;
 
-export const MediaList = ({projectId, compilationId, items = [], AdditionalInfoComponent, customNameCallback}) => {
+export const MediaList = ({projectId, items = [], AdditionalInfoComponent, nameCallback, urlCallback}) => {
     return (
         !!items?.length && <>
             {items.map(entry => (
                 <MediaListItem
                     key={entry.id}
                     projectId={projectId}
-                    compilationId={compilationId}
                     entry={entry}
                     AdditionalInfoComponent={AdditionalInfoComponent && <AdditionalInfoComponent entry={entry}/>}
-                    customName={customNameCallback && customNameCallback(entry)}
+                    name={nameCallback && nameCallback(entry)}
+                    url={urlCallback && urlCallback(entry)}
                 />
             ))}
         </>
     );
 };
 
-const MediaListItem = ({projectId, compilationId, entry, AdditionalInfoComponent, customName}) => {
-    const name = customName || entry.name;
-
+export const MediaListItem = ({
+    projectId,
+    entry,
+    AdditionalInfoComponent,
+    name,
+    url = viewProjectUrl(projectId, entry.id),
+    openInNewPage = false,
+}) => {
     return (
         <Link
-            to={viewProjectUrl(projectId, entry.id === compilationId ? "result" : entry.id)}
+            to={url}
             className={"inline-block gray-borders border-radius"}
             style={{
                 width: itemWidth,
@@ -37,11 +42,12 @@ const MediaListItem = ({projectId, compilationId, entry, AdditionalInfoComponent
                 textDecoration: "none",
             }}
             title={name}
+            target={openInNewPage && "_blank"}
         >
-            <div className={"input-padding"}>
+            {(name || AdditionalInfoComponent) && <div className={"input-padding"}>
                 <div className={"block single-line"}>{name}</div>
                 {AdditionalInfoComponent && <div className={"block"}><AdditionalInfoComponent/></div>}
-            </div>
+            </div>}
             <img
                 className={"block"}
                 src={thumbnailUrl(entry, itemWidth)}

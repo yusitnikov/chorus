@@ -7,8 +7,9 @@ import {HomePage} from "./pages/HomePage";
 import {CreatePage} from "./pages/CreatePage";
 import {ReplyPage} from "./pages/ReplyPage";
 import {ViewPage} from "./pages/ViewPage";
+import {EmbedPage} from "./pages/EmbedPage";
 import {PageNotFound} from "./errors/PageNotFound";
-import {createProjectUrl, homePageUrl, replyUrl, viewProjectUrl} from "../misc/url";
+import {createProjectUrl, homePageUrl, mediaEmbedUrl, replyUrl, viewProjectUrl} from "../misc/url";
 
 export const App = () => (
     <HashRouter>
@@ -21,6 +22,9 @@ export const App = () => (
             </Route>
             <Route exact={true} path={viewProjectUrl(":projectId", ":entryId?")}>
                 <ViewPage/>
+            </Route>
+            <Route exact={true} path={mediaEmbedUrl(":entryId")}>
+                <EmbedPage/>
             </Route>
             <Route exact={true} path={replyUrl(":projectId")}>
                 <ReplyPage/>

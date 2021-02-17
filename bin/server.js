@@ -10,7 +10,7 @@ import {
     getProjectCompilationId,
     getProjectIdByEntry,
     isProjectSourceEntry,
-    loadProjectEntries
+    loadProjectReplies
 } from "../src/models/Project";
 import {addMedia, deleteMedia, isMediaReady, loadMediaById, updateMedia} from "../src/models/Media";
 import {downloadUrl} from "../src/utils/downloadUrl";
@@ -71,7 +71,7 @@ const processCompilationRequest = async(entryId, request, response) => {
         return;
     }
 
-    let {replies} = await loadProjectEntries(source);
+    let replies = await loadProjectReplies(source);
     if (!replies.length) {
         console.log("    There are no replies yet, skipping");
         return;
@@ -168,7 +168,6 @@ const processCompilationRequest = async(entryId, request, response) => {
             console.log(`    uploaded the compilation as ${compilation.id}`);
 
             await updateMedia(source.id, {referenceId: compilation.id});
-            await updateMedia(compilation.id, {parentEntryId: source.id});
             console.log(`    linked compilation ${compilation.id} to the project ${source.id}`);
 
             if (previousCompilationId) {
