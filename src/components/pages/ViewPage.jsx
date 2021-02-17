@@ -138,7 +138,7 @@ export const ViewPage = () => {
 
                     {relatedEntries.length !== 0 && <>
                         <h2 className={"block"}>
-                            {translatePlural(relatedEntries.length, "%u related video", "%u related videos")}
+                            {translatePlural(relatedEntries.length, "%u reply", "%u replies")}
                         </h2>
 
                         <div className={"block"}>
