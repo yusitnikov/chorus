@@ -12,21 +12,24 @@ export const useLoader = (loader, deps = []) => {
     const resultPromise = useMemo(loader, allDeps);
     const isImmediatePromise = !!resultPromise.isImmediate;
 
-    let [[data, loadedVersion], setDataState] = useState(() => [undefined, 0]);
+    let [[data, error, loadedVersion], setDataState] = useState(() => [undefined, undefined, 0]);
     if (isImmediatePromise) {
         data = resultPromise.value;
+        error = undefined;
         loadedVersion = depsVersion;
     }
 
     useEffect(() => {
         const promise = abortablePromise(resultPromise);
 
-        promise.then(data => setDataState([data, depsVersion]));
+        promise
+            .then(data => setDataState([data, undefined, depsVersion]))
+            .catch(error => setDataState([undefined, error, depsVersion]));
 
         return () => promise.abort();
     }, [resultPromise, isImmediatePromise, setDataState, depsVersion]);
 
     return loadedVersion === depsVersion
-        ? [data, true, reload]
-        : [undefined, false, reload];
+        ? [data, error, true, reload]
+        : [undefined, undefined, false, reload];
 };

@@ -1,4 +1,7 @@
 import React, {forwardRef, useCallback, useEffect, useRef, useState} from "react";
+
+import "./Recorder.css";
+
 import {fixWebmDuration, Kaltura, ks} from "../misc/externals";
 import {VideoHolder} from "./VideoHolder";
 import {useEventListener} from "../hooks/useEventListener";
@@ -11,6 +14,8 @@ import {useObjectState} from "../hooks/useObjectState";
 import {phrasesByLocale} from "../locales/phrases";
 import {getCurrentLocaleCode} from "../locales/currentLocale";
 import {projectAdminTag} from "../models/Project";
+import {translate} from "../locales/translate";
+import {ActionLink} from "./ActionLink";
 
 export const RecorderState = {
     destroyed: "destroyed",
@@ -21,6 +26,7 @@ export const RecorderState = {
     recorded: "recorded",
     uploading: "uploading",
     updating: "updating",
+    updateError: "updateError",
     done: "done",
 };
 
@@ -28,6 +34,7 @@ export const Recorder = forwardRef(({
                                         parentEntryId = null,
                                         onStateChanged,
                                         onUploadedEntryIdChanged,
+                                        children,
                                     }, recorderRef) => {
     const containerId = "recorder" + useAutoIncrementId();
 
@@ -122,10 +129,19 @@ export const Recorder = forwardRef(({
                 const blob = new Blob(recorder.instance.state.recordedBlobs, { type: "video/webm" });
 
                 const fixedBlobPromise = abortablePromise(new Promise(resolve => fixWebmDuration(blob, duration, blob => resolve(blob))));
-                fixedBlobPromise.then((blob) => mergeState({
-                    blob,
-                    state: RecorderState.recorded,
-                }));
+                fixedBlobPromise
+                    .then((blob) => mergeState({
+                        blob,
+                        state: RecorderState.recorded,
+                    }))
+                    .catch((error) => {
+                        console.error("Failed to fix recorded video duration", error);
+                        // Use the unfixed blob here as a fallback
+                        mergeState({
+                            blob,
+                            state: RecorderState.recorded,
+                        });
+                    });
                 return () => fixedBlobPromise.abort();
             }
 
@@ -135,11 +151,12 @@ export const Recorder = forwardRef(({
                     parentEntryId,
                     adminTags: `expressrecorder,${projectAdminTag}`,
                 }));
-                entryUpdatePromise.then((result) => {
-                    console.log("Updated the entry", result);
-
-                    setState(RecorderState.done);
-                });
+                entryUpdatePromise
+                    .then(() => setState(RecorderState.done))
+                    .catch((error) => {
+                        console.error("Failed to update the entry", error);
+                        setState(RecorderState.updateError);
+                    });
                 return () => entryUpdatePromise.abort();
             }
         }
@@ -198,8 +215,16 @@ export const Recorder = forwardRef(({
     }, [player, originalPlayerConfig, blob]);
 
     return (
-        <VideoHolder className={"inline-block relative"}>
-            <div id={containerId} className={"fill ltr"} ref={ref}/>
+        <VideoHolder className={"inline-block relative ltr"}>
+            <div id={containerId} className={"fill"} ref={ref}/>
+
+            <div className={"Recorder__Children absolute"}>
+                {state === RecorderState.updateError && <div className={"block transparent-overlay input-padding border-radius"}>
+                    {translate("Failed to save the video.")} <ActionLink className={"link"} onClick={() => setState(RecorderState.updating)}>{translate("Retry")}</ActionLink>
+                </div>}
+
+                {children}
+            </div>
         </VideoHolder>
     );
 });

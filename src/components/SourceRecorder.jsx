@@ -4,6 +4,7 @@ import {Redirect} from "react-router-dom";
 import {translate} from "../locales/translate";
 import {updateMedia} from "../models/Media";
 import {WithLabel} from "./WithLabel";
+import {Error} from "./errors/Error";
 
 export const SourceRecorder = () => {
     const [state, setState] = useState(null);
@@ -80,11 +81,19 @@ const SourceRecorderInstructions = () => {
 const SourceRecorderForm = ({entryId, onSubmit}) => {
     const [entryName, setEntryName] = useState("");
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [failedToSubmit, setFailedToSubmit] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setFailedToSubmit(false);
         setFormSubmitted(true);
-        updateMedia(entryId, {name: entryName}).then(onSubmit);
+        updateMedia(entryId, {name: entryName})
+            .then(onSubmit)
+            .catch((error) => {
+                console.error("Failed to update the entry", error);
+                setFailedToSubmit(true);
+                setFormSubmitted(false);
+            });
     };
 
     return (
@@ -111,6 +120,14 @@ const SourceRecorderForm = ({entryId, onSubmit}) => {
                 >
                     {translate("Done")}
                 </button>
+
+                {formSubmitted && <span className={"inline-block input-padding"}>
+                    {translate("Saving...")}
+                </span>}
+
+                {failedToSubmit && <span className={"inline-block input-padding"}>
+                    <Error>{translate("Something went wrong. Please try again.")}</Error>
+                </span>}
             </div>
         </form>
     );

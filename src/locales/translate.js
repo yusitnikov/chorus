@@ -18,7 +18,16 @@ export const translate = (messageId, ...args) => {
     }
 
     return substituteArgs(translations && translations[getCurrentLocaleCode()] || messageId, ...args);
-}
+};
+
+export const translateWithContext = (messageId, contextId, ...args) => {
+    const fullMessageId = `${messageId}|${contextId}`;
+    let translation = translate(fullMessageId);
+    if (translation === fullMessageId) {
+        translation = messageId;
+    }
+    return substituteArgs(translation, ...args);
+};
 
 export const translatePlural = (n, messageIdSingle, messageIdPlural, ...args) => {
     let messageIdForms = translate(messageIdSingle);

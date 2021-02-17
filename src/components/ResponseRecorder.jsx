@@ -1,7 +1,5 @@
 import React, {useCallback, useRef, useState} from "react";
 
-import "./ResponseRecorder.css";
-
 import {Recorder, RecorderState} from "./Recorder";
 import {Player} from "./Player";
 import {VideoHolder} from "./VideoHolder";
@@ -46,11 +44,11 @@ export const ResponseRecorder = ({entry}) => {
                     parentEntryId={entry.id}
                     onStateChanged={handleStateChange}
                     ref={recorderRef}
-                />
-
-                {state === RecorderState.done && <div className={"ResponseRecorder__Recorder__Done transparent-overlay input-padding border-radius"}>
-                    {translate("Your reply was submitted.")} <ActionLink className={"link"} onClick={() => recorderRef.current?.startRecording()}>{translate("Record one more?")}</ActionLink>
-                </div>}
+                >
+                    {state === RecorderState.done && <div className={"ResponseRecorder__Recorder__Done transparent-overlay input-padding border-radius"}>
+                        {translate("Your reply was submitted.")} <ActionLink className={"link"} onClick={() => recorderRef.current?.startRecording()}>{translate("Record one more?")}</ActionLink>
+                    </div>}
+                </Recorder>
             </VideoHolder>
         </div>
     );

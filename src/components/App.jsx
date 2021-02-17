@@ -13,6 +13,7 @@ import {allLocales} from "../locales/allLocales";
 import {ActionLink} from "./ActionLink";
 import {Flag} from "./Flag";
 import {translate} from "../locales/translate";
+import {PageNotFound} from "./errors/PageNotFound";
 
 export const App = () => {
     if (!getCurrentLocaleCode()) {
@@ -49,7 +50,7 @@ export const App = () => {
                         <ReplyPage/>
                     </Route>
                     <Route path={"*"}>
-                        {translate("Page not found")}
+                        <PageNotFound/>
                     </Route>
                 </Switch>
             </div>

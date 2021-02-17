@@ -1,4 +1,27 @@
 export const phrasesById = {
+    // region Errors
+    "Page not found": {
+        ru: "Страница не найдена",
+        he: "הדף לא נמצא",
+    },
+    "This is not the page you're looking for.": {
+        ru: "Это не та страница, которую вы ищете.",
+        he: "זה לא הדף שאתם מחפשים.",
+    },
+    "Project not found": {
+        ru: "Проект не найден",
+        he: "הפרויקט לא נמצא",
+    },
+    "Failed to save the video.": {
+        ru: "Не удалось сохранить видео.",
+        he: "שמירת הסרטון נכשלה.",
+    },
+    "Retry": {
+        ru: "Повторить попытку",
+        en: "לנסות שוב",
+    },
+    // endregion
+
     // region App
     "Home": {
         ru: "Главная",
@@ -7,10 +30,6 @@ export const phrasesById = {
     "Create New Project": {
         ru: "Создать новый проект",
         he: "צור פרויקט חדש",
-    },
-    "Page not found": {
-        ru: "Страница не найдена",
-        he: "הדף לא נמצא",
     },
     // endregion
 
@@ -23,12 +42,20 @@ export const phrasesById = {
         ru: "Попробуйте создать новый проект",
         he: "נסה ליצור פרויקט חדש",
     },
+    "Something went wrong. Please try again.": {
+        ru: "Что-то пошло не так. Пожалуйста, попробуйте еще раз.",
+        he: "משהו השתבש. אנא נסו שוב.",
+    },
     // endregion
 
     // region ViewPage
-    "Reply": {
+    "Reply|verb": {
         ru: "Ответить",
         he: "להגיב",
+    },
+    "Reply|noun": {
+        ru: "Ответ",
+        he: "תגובה",
     },
     "%u related video": {
         ru: ["%u связанное видео", "%u связанных видео", "%u связанных видео"],
@@ -141,6 +168,10 @@ export const phrasesById = {
     "Type text...": {
         ru: "Введите текст...",
         he: "הקלד טקסט...",
+    },
+    "Saving...": {
+        ru: "Сохранение...",
+        he: "שמירה...",
     },
     // endregion
     // endregion

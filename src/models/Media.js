@@ -22,7 +22,9 @@ export const loadMediaById = (id, useCache = false) => {
 
     if (useCache) {
         mediaGetCache[id] = resultPromise;
-        mediaGetCache[id].then(result => mediaGetCache[id] = result);
+        mediaGetCache[id]
+            .then(result => mediaGetCache[id] = result)
+            .catch(() => delete mediaGetCache[id]);
     }
 
     return resultPromise;
@@ -47,20 +49,19 @@ export const loadMediaList = (filter, useCache = false) => {
 
     if (useCache) {
         mediaListCache[key] = objectsPromise;
-        objectsPromise.then(objects => {
-            mediaListCache[key] = objects;
-            for (const entry of objects) {
-                mediaGetCache[entry.id] = entry;
-            }
-        });
+        objectsPromise
+            .then(objects => {
+                mediaListCache[key] = objects;
+                for (const entry of objects) {
+                    mediaGetCache[entry.id] = entry;
+                }
+            })
+            .catch(() => delete mediaListCache[key]);
     }
 
     return objectsPromise;
 };
 export const useLoadMediaList = (filter) => useLoader(() => filter ? loadMediaList(filter) : immediatePromise(null), [JSON.stringify(filter)]);
-
-export const loadMediaChildren = (entryId, useCache = false) => loadMediaList({parentEntryIdEqual: entryId}, useCache);
-export const useLoadMediaChildren = (entryId) => useLoader(() => entryId ? loadMediaChildren(entryId, true) : immediatePromise(null), [entryId]);
 
 export const addMedia = async(data, contentPath) => {
     clearMediaCache();

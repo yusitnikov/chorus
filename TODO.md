@@ -1,8 +1,7 @@
 # TODO
 
 1. (feat) GUIDES!!! (+ a tip about the headsets or 1 ear pod?)
-1. (fix) Handle exceptions in useLoader.
-1. (fix) Create normal "loading" and "error" views.
+1. (fix) Create normal "loading" view.
 1. (feat) Mobile support.
 1. (feat) A branded page for the compiled video.
 1. (refactor) Clean up bin/server - move code to models.

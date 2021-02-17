@@ -1,4 +1,4 @@
-import {loadMediaChildren} from "./Media";
+import {loadMediaList} from "./Media";
 import {useLoader} from "../hooks/useLoader";
 import {immediatePromise} from "../misc/immediatePromise";
 import {translate} from "../locales/translate";
@@ -12,7 +12,7 @@ export const isProjectSourceEntry = (source) => source.adminTags && source.admin
 export const getProjectCompilationId = (sourceEntry) => sourceEntry.referenceId;
 
 export const loadProjectEntries = async(source, useCache = false) => {
-    const allEntries = await loadMediaChildren(source.id, useCache);
+    const allEntries = await loadMediaList({parentEntryIdEqual: source.id}, useCache);
 
     const compilationId = getProjectCompilationId(source);
 

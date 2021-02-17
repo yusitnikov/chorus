@@ -10,15 +10,16 @@ import {
     getProjectIdByEntry, isProjectSourceEntry,
     useLoadProjectEntries
 } from "../../models/Project";
-import {translate, translatePlural} from "../../locales/translate";
+import {translate, translatePlural, translateWithContext} from "../../locales/translate";
 import {useLoadMediaById} from "../../models/Media";
+import {PageNotFound} from "../errors/PageNotFound";
 
 export const ViewPage = () => {
     const {projectId, entryId: entryIdStr} = useParams();
 
     let redirectTo = null;
 
-    const [source, sourceLoaded] = useLoadMediaById(projectId);
+    const [source, sourceError, sourceLoaded] = useLoadMediaById(projectId);
 
     // The first part of the URL is not a projectId by mistake
     const actualProjectId = source && getProjectIdByEntry(source);
@@ -38,9 +39,13 @@ export const ViewPage = () => {
     }
 
     const entryIdToLoad = (redirectTo || entryId === projectId) ? "" : entryId;
-    let [entry, entryLoaded] = useLoadMediaById(entryIdToLoad);
+    let [entry, entryError, entryLoaded] = useLoadMediaById(entryIdToLoad);
     if (entryId && !entryIdToLoad) {
         entry = source;
+    }
+
+    if (entryError) {
+        redirectTo = redirectTo || `/view/${projectId}`;
     }
 
     // The second part of the URL is an entry that doesn't belong to this project
@@ -49,28 +54,32 @@ export const ViewPage = () => {
         redirectTo = redirectTo || `/view/${actualProjectId2}/${entryIdStr}`;
     }
 
-    const [projectEntries, projectEntriesLoaded] = useLoadProjectEntries(source);
+    const [projectEntries, projectEntriesError, projectEntriesLoaded] = useLoadProjectEntries(source);
     const {compilation, replies = []} = projectEntries || {};
+
+    if (sourceError) {
+        return <PageNotFound title={translate("Project not found")}/>;
+    }
 
     if (redirectTo) {
         return <Redirect to={redirectTo}/>;
     }
 
-    if (!entryLoaded || !sourceLoaded || !projectEntriesLoaded) {
+    if (!entryLoaded || !sourceLoaded) {
         return null;
     }
 
     const relatedEntries = [source, ...replies, compilation].filter(entry => entry && entry.id !== entryId);
 
-    const names = getProjectEntryNamesMap(projectId, compilation?.id, replies);
+    const names = getProjectEntryNamesMap(projectId, getProjectCompilationId(source), replies);
 
     return (
         <>
             <h1 className={"block"}>
-                {source.name} - {names[entryId]}
+                {source.name} - {names[entryId] || translateWithContext("Reply", "noun")}
 
                 {isProject && <Link to={`/reply/${projectId}`} className={"ViewPage__ReplyLink link"}>
-                    {translate("Reply")}
+                    {translateWithContext("Reply", "verb")}
                 </Link>}
             </h1>
 
@@ -79,7 +88,7 @@ export const ViewPage = () => {
                     <Player entry={entry}/>
                 </div>
 
-                {isProject && <div className={"inline-block"}>
+                {isProject && projectEntriesLoaded && !projectEntriesError && <div className={"inline-block"}>
                     <h2 className={"block"}>
                         {translatePlural(relatedEntries.length, "%u related video", "%u related videos")}
                     </h2>

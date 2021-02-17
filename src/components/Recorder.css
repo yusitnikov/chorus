@@ -1,9 +1,9 @@
-.ResponseRecorder__Recorder__Done {
+.Recorder__Children {
     position: absolute;
     left: 16px;
     top: 16px;
 }
 
-.ResponseRecorder__Recorder__Done a.link {
+.Recorder__Children a.link {
     color: white !important;
 }
