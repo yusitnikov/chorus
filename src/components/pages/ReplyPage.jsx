@@ -26,6 +26,7 @@ export const ReplyPage = () => {
 
     return (
         <Layout
+            plainTitle={`${translate("Reply to ")}${source.name}`}
             title={<>
                 {translate("Reply to ")}
                 <Link to={viewProjectUrl(projectId)} className={"link"}>{source.name}</Link>

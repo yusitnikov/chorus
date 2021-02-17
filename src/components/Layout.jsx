@@ -8,8 +8,11 @@ import {ActionLink} from "./ActionLink";
 import {Flag} from "./Flag";
 import {translate} from "../locales/translate";
 import {createProjectUrl, homePageUrl} from "../misc/url";
+import {usePageTitle} from "../hooks/usePageTitle";
 
-export const Layout = ({children, title}) => {
+export const Layout = ({children, title, plainTitle}) => {
+    usePageTitle(plainTitle || title);
+
     if (!getCurrentLocaleCode()) {
         return <div className={"ltr"}><LanguageSelectionScreen onLanguageSelected={setCurrentLocaleCode}/></div>;
     }

@@ -6,7 +6,7 @@ import {timeoutPromise} from "../misc/timeoutPromise";
 import {translate} from "../locales/translate";
 import {WithLabel} from "./WithLabel";
 
-export const CopyToClipboardInput = ({text, label, labelWidth, onCopy}) => {
+export const CopyToClipboardInput = ({text, label, labelWidth, inputWidth, onCopy}) => {
     const [copied, setCopied] = useState(false);
     const [, setResetCopiedPromise] = useScopedPromise();
 
@@ -30,6 +30,7 @@ export const CopyToClipboardInput = ({text, label, labelWidth, onCopy}) => {
                     type={"text"}
                     readOnly={true}
                     className={"ltr inline-margin input-padding gray-borders border-radius"}
+                    style={{width: inputWidth}}
                     value={text}
                     onFocus={event => event.target.select()}
                     onCopy={handleCopy}

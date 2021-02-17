@@ -59,12 +59,6 @@ export const ViewPage = () => {
         return <Redirect to={viewProjectUrl(actualProjectId, projectId)}/>;
     }
 
-    const isProject = source && isProjectSourceEntry(source);
-
-    if (source && !entryId) {
-        return <Redirect to={viewProjectUrl(projectId)}/>;
-    }
-
     if (entryError) {
         return <Redirect to={viewProjectUrl(projectId)}/>;
     }
@@ -83,18 +77,25 @@ export const ViewPage = () => {
         return <Layout/>;
     }
 
+    if (!isProjectSourceEntry(source)) {
+        return <Redirect to={mediaEmbedUrl(projectId)}/>;
+    }
+
     const relatedEntries = [source, ...replies].filter(entry => entry && entry.id !== entryId);
 
     const names = getProjectEntryNamesMap(projectId, compilationId, replies);
 
+    const pageTitle = `${source.name} - ${names[entryId] || translateWithContext("Reply", "noun")}`;
+
     return (
         <Layout
+            plainTitle={pageTitle}
             title={<>
-                {source.name}{isProject && ` - ${names[entryId] || translateWithContext("Reply", "noun")}`}
+                {pageTitle}
 
-                {isProject && <Link to={replyUrl(projectId)} className={"ViewPage__ReplyLink link"}>
+                <Link to={replyUrl(projectId)} className={"ViewPage__ReplyLink link"}>
                     {translateWithContext("Reply", "verb")}
-                </Link>}
+                </Link>
             </>}
         >
             {isNewProject && <SourceRecorderInstructions
@@ -129,6 +130,11 @@ export const ViewPage = () => {
                         url={absoluteUrl(replyUrl(projectId))}
                         onCopy={() => setReplyLinkCopied(true)}
                     />
+
+                    {compilationId && <ViewPageLinkShare
+                        label={translate("Result link:")}
+                        url={absoluteUrl(mediaEmbedUrl(projectId))}
+                    />}
 
                     {relatedEntries.length !== 0 && <>
                         <h2 className={"block"}>
@@ -169,6 +175,7 @@ const ViewPageLinkShare = ({label, url, onCopy}) => (
         text={url}
         label={label}
         labelWidth={getCurrentLocaleCode() === "he" ? 110 : 160}
+        inputWidth={250}
         onCopy={onCopy}
     />
 );
