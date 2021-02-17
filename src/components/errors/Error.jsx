@@ -1,11 +1,12 @@
 import React from "react";
 
-export const Error = ({title, children}) => {
-    return (
-        <>
-            {title && <h1 className={"block"}>{title}</h1>}
+import "./Error.css";
 
-            <div className={"block"}>{children}</div>
-        </>
-    )
-};
+export const Error = ({children, className = "", ...divProps}) => (
+    <div
+        className={`Error ${className}`}
+        {...divProps}
+    >
+        {children}
+    </div>
+);

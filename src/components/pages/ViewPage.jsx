@@ -17,6 +17,7 @@ import {CopyToClipboardInput} from "../CopyToClipboardInput";
 import {getCurrentLocaleCode} from "../../locales/currentLocale";
 import {isRecentlyCreatedProject} from "../../sharedData/recentlyCreatedProjects";
 import {SourceRecorderInstructions, SourceRecorderInstructionsCompilationNote} from "../SourceRecorder";
+import {Layout} from "../Layout";
 
 export const ViewPage = () => {
     const {projectId, entryId: entryIdStr} = useParams();
@@ -87,7 +88,7 @@ export const ViewPage = () => {
     }
 
     if (!allLoaded) {
-        return null;
+        return <Layout/>;
     }
 
     const relatedEntries = [source, ...replies, compilation].filter(entry => entry && entry.id !== entryId);
@@ -95,15 +96,15 @@ export const ViewPage = () => {
     const names = getProjectEntryNamesMap(projectId, getProjectCompilationId(source), replies);
 
     return (
-        <>
-            <h1 className={"block"}>
+        <Layout
+            title={<>
                 {source.name}{isProject && ` - ${names[entryId] || translateWithContext("Reply", "noun")}`}
 
                 {isProject && <Link to={`/reply/${projectId}`} className={"ViewPage__ReplyLink link"}>
                     {translateWithContext("Reply", "verb")}
                 </Link>}
-            </h1>
-
+            </>}
+        >
             {isNewProject && <SourceRecorderInstructions
                 fulfilledSteps={{
                     1: true,
@@ -153,7 +154,7 @@ export const ViewPage = () => {
                     </>}
                 </div>
             </div>
-        </>
+        </Layout>
     );
 };
 

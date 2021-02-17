@@ -4,6 +4,7 @@ import {ResponseRecorder} from "../ResponseRecorder";
 import {useLoadMediaById} from "../../models/Media";
 import {translate} from "../../locales/translate";
 import {PageNotFound} from "../errors/PageNotFound";
+import {Layout} from "../Layout";
 
 export const ReplyPage = () => {
     const {projectId} = useParams();
@@ -15,7 +16,7 @@ export const ReplyPage = () => {
     }
 
     if (!source) {
-        return null;
+        return <Layout/>;
     }
 
     if (source.parentEntryId) {
@@ -23,12 +24,13 @@ export const ReplyPage = () => {
     }
 
     return (
-        <>
-            <h1 className={"block"}>
-                {translate("Reply to ")}<Link to={`/view/${projectId}`} className={"link"}>{source.name}</Link>
-            </h1>
-
+        <Layout
+            title={<>
+                {translate("Reply to ")}
+                <Link to={`/view/${projectId}`} className={"link"}>{source.name}</Link>
+            </>}
+        >
             <ResponseRecorder entry={source}/>
-        </>
+        </Layout>
     );
 };
