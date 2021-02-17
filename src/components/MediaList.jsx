@@ -42,7 +42,7 @@ export const MediaListItem = ({
                 textDecoration: "none",
             }}
             title={name}
-            target={openInNewPage && "_blank"}
+            target={openInNewPage ? "_blank" : undefined}
         >
             {(name || AdditionalInfoComponent) && <div className={"input-padding"}>
                 <div className={"block single-line"}>{name}</div>
