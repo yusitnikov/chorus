@@ -6,6 +6,7 @@ import {updateMedia} from "../models/Media";
 import {WithLabel} from "./WithLabel";
 import {Error} from "./errors/Error";
 import {addRecentlyCreatedProject} from "../sharedData/recentlyCreatedProjects";
+import {viewProjectUrl} from "../misc/url";
 
 export const SourceRecorder = () => {
     const [state, setState] = useState(null);
@@ -15,7 +16,7 @@ export const SourceRecorder = () => {
     if (entryId && formSubmitted) {
         addRecentlyCreatedProject(entryId);
 
-        return <Redirect to={`/view/${entryId}`}/>;
+        return <Redirect to={viewProjectUrl(entryId)}/>;
     }
 
     const doneRecording = entryId && state === RecorderState.done;

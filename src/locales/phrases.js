@@ -22,7 +22,7 @@ export const phrasesById = {
     },
     // endregion
 
-    // region App
+    // region Layout
     "Home": {
         ru: "Главная",
         he: "דף הראשי",

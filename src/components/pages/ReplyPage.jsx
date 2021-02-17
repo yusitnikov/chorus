@@ -5,6 +5,7 @@ import {useLoadMediaById} from "../../models/Media";
 import {translate} from "../../locales/translate";
 import {PageNotFound} from "../errors/PageNotFound";
 import {Layout} from "../Layout";
+import {viewProjectUrl} from "../../misc/url";
 
 export const ReplyPage = () => {
     const {projectId} = useParams();
@@ -27,7 +28,7 @@ export const ReplyPage = () => {
         <Layout
             title={<>
                 {translate("Reply to ")}
-                <Link to={`/view/${projectId}`} className={"link"}>{source.name}</Link>
+                <Link to={viewProjectUrl(projectId)} className={"link"}>{source.name}</Link>
             </>}
         >
             <ResponseRecorder entry={source}/>

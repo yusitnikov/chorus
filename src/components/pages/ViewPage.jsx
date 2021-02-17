@@ -18,6 +18,7 @@ import {getCurrentLocaleCode} from "../../locales/currentLocale";
 import {isRecentlyCreatedProject} from "../../sharedData/recentlyCreatedProjects";
 import {SourceRecorderInstructions, SourceRecorderInstructionsCompilationNote} from "../SourceRecorder";
 import {Layout} from "../Layout";
+import {absoluteUrl, currentPageUrl, replyUrl, viewProjectUrl} from "../../misc/url";
 
 export const ViewPage = () => {
     const {projectId, entryId: entryIdStr} = useParams();
@@ -33,7 +34,7 @@ export const ViewPage = () => {
     const actualProjectId = source && getProjectIdByEntry(source);
     if (actualProjectId && actualProjectId !== projectId) {
         // noinspection PointlessBooleanExpressionJS
-        redirectTo = redirectTo || `/view/${actualProjectId}/${projectId}`;
+        redirectTo = redirectTo || viewProjectUrl(actualProjectId, projectId);
     }
 
     const isProject = source && isProjectSourceEntry(source);
@@ -43,7 +44,7 @@ export const ViewPage = () => {
         : (entryIdStr || projectId);
 
     if (source && !entryId) {
-        redirectTo = redirectTo || `/view/${projectId}`;
+        redirectTo = redirectTo || viewProjectUrl(projectId);
     }
 
     const entryIdToLoad = (redirectTo || entryId === projectId) ? "" : entryId;
@@ -53,13 +54,13 @@ export const ViewPage = () => {
     }
 
     if (entryError) {
-        redirectTo = redirectTo || `/view/${projectId}`;
+        redirectTo = redirectTo || viewProjectUrl(projectId);
     }
 
     // The second part of the URL is an entry that doesn't belong to this project
     const actualProjectId2 = entry && getProjectIdByEntry(entry);
     if (actualProjectId2 && actualProjectId2 !== projectId) {
-        redirectTo = redirectTo || `/view/${actualProjectId2}/${entryIdStr}`;
+        redirectTo = redirectTo || viewProjectUrl(actualProjectId2, entryIdStr);
     }
 
     const [projectEntries] = useLoadProjectEntries(source);
@@ -100,7 +101,7 @@ export const ViewPage = () => {
             title={<>
                 {source.name}{isProject && ` - ${names[entryId] || translateWithContext("Reply", "noun")}`}
 
-                {isProject && <Link to={`/reply/${projectId}`} className={"ViewPage__ReplyLink link"}>
+                {isProject && <Link to={replyUrl(projectId)} className={"ViewPage__ReplyLink link"}>
                     {translateWithContext("Reply", "verb")}
                 </Link>}
             </>}
@@ -128,13 +129,13 @@ export const ViewPage = () => {
 
                     <ViewPageLinkShare
                         label={translate("Link to the project:")}
-                        url={window.location.href}
+                        url={currentPageUrl()}
                         onCopy={() => setProjectLinkCopied(true)}
                     />
 
                     <ViewPageLinkShare
                         label={translate("Reply link:")}
-                        url={`${window.location.origin}/#/reply/${projectId}`}
+                        url={absoluteUrl(replyUrl(projectId))}
                         onCopy={() => setReplyLinkCopied(true)}
                     />
 

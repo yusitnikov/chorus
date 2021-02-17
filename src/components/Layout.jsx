@@ -7,6 +7,7 @@ import {allLocales} from "../locales/allLocales";
 import {ActionLink} from "./ActionLink";
 import {Flag} from "./Flag";
 import {translate} from "../locales/translate";
+import {createProjectUrl, homePageUrl} from "../misc/url";
 
 export const Layout = ({children, title}) => {
     if (!getCurrentLocaleCode()) {
@@ -16,8 +17,8 @@ export const Layout = ({children, title}) => {
     return (
         <div className={`App ${isRtl() ? "rtl" : "ltr"}`}>
             <div className={"block"}>
-                <NavLink className={"link nav-link"} exact={true} to={"/"}>{translate("Home")}</NavLink>
-                <NavLink className={"link nav-link"} exact={true} to={"/create"}>{translate("Create New Project")}</NavLink>
+                <NavLink className={"link nav-link"} exact={true} to={homePageUrl}>{translate("Home")}</NavLink>
+                <NavLink className={"link nav-link"} exact={true} to={createProjectUrl}>{translate("Create New Project")}</NavLink>
 
                 <div className={"nav-link float-right"}>
                     {allLocales.map(({code, name}) => (

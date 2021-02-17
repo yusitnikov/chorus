@@ -2,6 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {thumbnailUrl} from "../utils/thumbnailUrl";
 import {playerAspectRatio} from "../misc/playerAspectRatio";
+import {viewProjectUrl} from "../misc/url";
 
 const itemWidth = 160;
 const itemHeight = itemWidth * playerAspectRatio;
@@ -28,7 +29,7 @@ const MediaListItem = ({projectId, compilationId, entry, AdditionalInfoComponent
 
     return (
         <Link
-            to={`/view/${projectId}${entry.id !== projectId ? `/${entry.id === compilationId ? "result" : entry.id}` : ""}`}
+            to={viewProjectUrl(projectId, entry.id === compilationId ? "result" : entry.id)}
             className={"inline-block gray-borders border-radius"}
             style={{
                 width: itemWidth,
