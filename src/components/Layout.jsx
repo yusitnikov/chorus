@@ -19,8 +19,8 @@ export const Layout = ({children, title, plainTitle}) => {
 
     return (
         <div className={`App ${isRtl() ? "rtl" : "ltr"}`}>
-            <div className={"block"}>
-                <NavLink className={"link nav-link"} exact={true} to={homePageUrl}>{translate("Home")}</NavLink>
+            <div className={"block input-padding"} style={{backgroundColor: "#eee"}}>
+                <NavLink className={"link nav-link"} exact={true} to={homePageUrl}>{translate("About the Chorus service")}</NavLink>
                 <NavLink className={"link nav-link"} exact={true} to={createProjectUrl}>{translate("Create New Project")}</NavLink>
 
                 <div className={"nav-link float-right"}>
@@ -32,9 +32,11 @@ export const Layout = ({children, title, plainTitle}) => {
                 </div>
             </div>
 
-            {title && <h1 className={"block"}>{title}</h1>}
+            <div className={"block input-padding"}>
+                {title && <h1 className={"block"}>{title}</h1>}
 
-            {children}
+                {children}
+            </div>
         </div>
     );
 };

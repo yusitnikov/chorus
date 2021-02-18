@@ -47,14 +47,13 @@ export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
             </summary>
 
             <SourceRecorderInstructionsStep step={1} done={fulfilledSteps[1]}>
-                {translate("Record your part of the song. Use the recorder below - hit the red button to start.")} {translate("Some useful tips:")}
+                {translate("Record your part of the song.")} {translate("Use the recorder below - hit the red button to start.")} {translate("Some useful tips:")}
                 <ul>
-                    <li>{translate("Check the camera/audio settings before you start.")}</li>
+                    <SourceRecorderInstructionsPreRecordCheckList/>
                     <li>{translate("Don't start singing immediately. Start with a sign of when you're going to start singing instead (e.g. \"two, one, (start singing)\"). It will be easier for your co-recorders to join in time this way.")}</li>
                     <li>{translate("You can even start with a speech to your co-recorders: explain what's your project, how to reply, give some useful tips. You will always be able to cut it later. Just make sure to keep it short: remember, the co-recorders will not be able to skip it while recording their replies.")}</li>
                     <li>{translate("Sing clear. If you're full of initiatives but can't sing clear - no problem, just ask your friend to help :)")}</li>
-                    <li>{translate("Sing loud.")}</li>
-                    <li>{translate("Listen to the recording before uploading it, check that everything's all right.")}</li>
+                    <SourceRecorderInstructionsRecordCheckList/>
                 </ul>
             </SourceRecorderInstructionsStep>
 
@@ -80,6 +79,19 @@ export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
         </details>
     );
 }
+
+export const SourceRecorderInstructionsPreRecordCheckList = () => (
+    <>
+        <li>{translate("Check the camera/audio settings before you start.")}</li>
+    </>
+);
+
+export const SourceRecorderInstructionsRecordCheckList = () => (
+    <>
+        <li>{translate("Sing loud.")}</li>
+        <li>{translate("Listen to the recording before uploading it, check that everything's all right.")}</li>
+    </>
+);
 
 export const SourceRecorderInstructionsCompilationNote = () => (
     <>

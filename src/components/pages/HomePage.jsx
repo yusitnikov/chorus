@@ -7,7 +7,7 @@ import {createProjectUrl} from "../../misc/url";
 
 export const HomePage = () => {
     return (
-        <Layout title={translate("Welcome to the Chorus project!")}>
+        <Layout title={translate("About the service")}>
             <div className={"block"}>
                 <Link to={createProjectUrl}>{translate("Try creating a new project")}</Link>
             </div>

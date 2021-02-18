@@ -28,12 +28,12 @@ export const EmbedPage = () => {
     }
 
     return (
-        <>
+        <div className={"block input-padding"}>
             <h1 className={"block"}>
                 {entry.name} - <Link className={"link"} to={homePageUrl} target={"_blank"}>Chorus</Link>
             </h1>
 
             <Player entry={isProject ? compilation : entry}/>
-        </>
+        </div>
     );
 };

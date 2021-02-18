@@ -136,11 +136,11 @@ export const ViewPage = () => {
                         url={absoluteUrl(mediaEmbedUrl(projectId))}
                     />}
 
-                    {relatedEntries.length !== 0 && <>
-                        <h2 className={"block"}>
-                            {translatePlural(relatedEntries.length, "%u reply", "%u replies")}
-                        </h2>
+                    <h2 className={"block"}>
+                        {translatePlural(relatedEntries.length, "%u reply", "%u replies")}
+                    </h2>
 
+                    {relatedEntries.length !== 0 && <>
                         <div className={"block"}>
                             <MediaList
                                 projectId={projectId}

@@ -22,14 +22,18 @@ export const phrasesById = {
     },
     "Retry": {
         ru: "Повторить попытку",
-        en: "לנסות שוב",
+        he: "לנסות שוב",
     },
     // endregion
 
     // region Layout
-    "Home": {
-        ru: "Главная",
-        he: "דף הראשי",
+    "About the Chorus service": {
+        ru: "О сервисе Chorus",
+        he: "על השירות Chorus",
+    },
+    "About the service": {
+        ru: "О сервисе",
+        he: "על השירות",
     },
     "Create New Project": {
         ru: "Создать новый проект",
@@ -38,10 +42,6 @@ export const phrasesById = {
     // endregion
 
     // region HomePage
-    "Welcome to the Chorus project!": {
-        ru: "Добро пожаловать в проект Chorus!",
-        he: "ברוכים הבאים לפרויקט Chorus!",
-    },
     "Try creating a new project": {
         ru: "Попробуйте создать новый проект",
         he: "נסה ליצור פרויקט חדש",
@@ -134,9 +134,13 @@ export const phrasesById = {
         ru: "Шаг %1",
         he: "שלב %1",
     },
-    "Record your part of the song. Use the recorder below - hit the red button to start.": {
-        ru: "Запишите свою часть песни. Используйте рекордер ниже - нажмите на красную кнопку, чтобы начать.",
-        he: "הקליטו את החלק שלכם בשיר. השתמשו במקליט למטה - לחצו על הכפתור האדום כדי להתחיל.",
+    "Record your part of the song.": {
+        ru: "Запишите свою часть песни.",
+        he: "הקליטו את החלק שלכם בשיר.",
+    },
+    "Use the recorder below - hit the red button to start.": {
+        ru: "Используйте рекордер ниже - нажмите на красную кнопку, чтобы начать.",
+        he: "השתמשו במקליט למטה - לחצו על הכפתור האדום כדי להתחיל.",
     },
     "Some useful tips:": {
         ru: "Несколько полезных советов:",
@@ -183,7 +187,7 @@ export const phrasesById = {
         he: "שתפו את קישור התגובה עם אנשים שתרצו שיקליטו תגובות לסרטון שלכם.",
     },
     "All replies and the source recording will be automatically compiled into 1 video of everyone singing together after submitting each reply.": {
-        ru: "Все ответы и исходная запись будут автоматически скомпилированы в 1 видео, в котором все будут петь вместе, после отправки каждого ответа.",
+        ru: "Все ответы и исходная запись будут автоматически скомпилированы в 1 видео, в котором все поют вместе, после отправки каждого ответа.",
         he: "כל התשובות והקלטת המקור יורכבו אוטומטית לסרטון אחד של כולם שרים יחד לאחר הגשת כל תשובה.",
     },
     "Note: it may take time to process the videos (seconds or minutes, depending on the video length and quality).": {
@@ -216,6 +220,30 @@ export const phrasesById = {
     // endregion
 
     // region ResponseRecorder
+    "If you got to this page, you were asked by your friend or colleague to join their Chorus project: they recorded a song that you can see in the player below, and ask you to record yourself singing it together with them.": {
+        ru: "Если вы попали на эту страницу, ваш друг или коллега попросил вас присоединиться к его проекту Chorus: он записал песню, которую вы можете прослушать в проигрывателе ниже, и попросил вас подпеть на запись.",
+        he: "אם הגעתם לדף זה התבקשתם על ידי חברך או עמיתך להצטרף לפרויקט Chorus שלהם: הם הקליטו שיר שתוכלו לראות בנגן למטה, ובקשו שתקליטו בעצמכם שרים אותו יחד איתם.",
+    },
+    "Learn more about the Chorus service": {
+        ru: "Узнать больше о сервисе Chorus",
+        he: "למידע נוסף על שירות Chorus",
+    },
+    "Recordings of all project participants will be automatically compiled into 1 video of everyone singing together.": {
+        ru: "Записи всех участников проекта будут автоматически скомпилированы в 1 видео, в котором все поют вместе.",
+        he: "הקלטות של כל משתתפי הפרויקט יורכבו אוטומטית לסרטון אחד של כולם שרים יחד.",
+    },
+    "See other replies": {
+        ru: "См. другие ответы",
+        he: "ראו תשובות אחרות",
+    },
+    "Listen to the original recording once. Try singing along until you see that you can start on time and sing along without major hitches.": {
+        ru: "Прослушайте исходную запись один раз. Попробуйте подпевать пока не увидите, что у вас получается вовремя вступать и подпевать без серьезных заминок.",
+        he: "האזינו להקלטת המקור פעם אחת. נסו לשיר יחד עד שתראו שאתם יכולים להתחיל בזמן ולשיר יחד בלי תקלות גדולות.",
+    },
+    "Don't strive for absolute perfection. If you are not preparing a song for an international competition, minor flaws are ok.": {
+        ru: "Не нужно стремиться к абсолютному идеалу. Если вы не готовите песню к международному конкурсу, мелкие недочеты - это в порядке вещей.",
+        he: "אל תשאפו לשלמות מוחלטת. אם אינכם מכינים שיר לתחרות בינלאומית, פגמים קלים זה בסדר.",
+    },
     "Your reply was submitted.": {
         ru: "Ваш ответ был отправлен.",
         he: "תגובתך הוגשה בהצלחה.",
