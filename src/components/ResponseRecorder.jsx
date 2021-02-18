@@ -53,6 +53,7 @@ export const ResponseRecorder = ({entry}) => {
                     <SourceRecorderInstructionsPreRecordCheckList/>
                     <li>{translate("Listen to the original recording once. Try singing along until you see that you can start on time and sing along without major hitches.")}</li>
                     <li>{translate("Don't strive for absolute perfection. If you are not preparing a song for an international competition, minor flaws are ok.")}</li>
+                    <li>{translate("Use a headset or earphones to make sure that the source video won't be recorded again through your mic. One earphone is a perfect choice.")}</li>
                     <SourceRecorderInstructionsRecordCheckList/>
                 </ul>
             </div>
