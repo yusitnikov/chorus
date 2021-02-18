@@ -16,7 +16,7 @@ export const Player = forwardRef(({entry, onPlaybackEnded}, playerRef) => {
 
     const entryReady = isMediaReady(entry);
     const entryDownloadUrl = downloadUrl(entry, ks);
-    const entryThumbnailUrl = thumbnailUrl(entry, defaultPlayerWidth);
+    const entryThumbnailUrl = thumbnailUrl(entry, defaultPlayerWidth, 1);
 
     useEffect(() => {
         const player = KalturaPlayer.setup({
