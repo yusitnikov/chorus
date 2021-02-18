@@ -24,6 +24,10 @@ export const phrasesById = {
         ru: "Повторить попытку",
         he: "לנסות שוב",
     },
+    "Something went wrong. Please try again.": {
+        ru: "Что-то пошло не так. Пожалуйста, попробуйте еще раз.",
+        he: "משהו השתבש. אנא נסו שוב.",
+    },
     // endregion
 
     // region Layout
@@ -42,13 +46,33 @@ export const phrasesById = {
     // endregion
 
     // region HomePage
-    "Try creating a new project": {
-        ru: "Попробуйте создать новый проект",
-        he: "נסה ליצור פרויקט חדש",
+    "Chorus allows a group of people to record songs and other musical compositions together without being in the same room.": {
+        ru: "Chorus позволяет группе людей совместно записывать песни и прочие музыкальные композиции, не находясь при этом в одном помещении.",
+        he: "Chorus מאפשר לקבוצת אנשים להקליט שירים ויצירות מוזיקליות אחרות יחד מבלי להיות באותו חדר.",
     },
-    "Something went wrong. Please try again.": {
-        ru: "Что-то пошло не так. Пожалуйста, попробуйте еще раз.",
-        he: "משהו השתבש. אנא נסו שוב.",
+    "In these times of global pandemic, friends and colleagues sometimes find it difficult to get together, and virtual services on the worldwide web come to the rescue.": {
+        ru: "В нынешние времена глобальной пандемии друзьям и коллегам иногда бывает трудно собраться вместе, и на помощь приходят виртуальные сервисы во всемирной  сети.",
+        he: "בתקופות אלה של מגיפה עולמית, חברים ועמיתים מתקשים לפעמים להיפגש, ושירותים וירטואליים ברשת העולמית נחלצים.",
+    },
+    "How to do it?": {
+        ru: "Как это делается?",
+        he: "איך עושים את זה?",
+    },
+    "It starts with one person recording a song on their webcam.": {
+        ru: "Все начинается с того, что один человек записывает песню на свою веб-камеру.",
+        he: "זה מתחיל באדם אחד שמקליט שיר במצלמת הרשת שלו.",
+    },
+    "Then they share a link to the project with other people, and each of them is recording how they sing along with the source video.": {
+        ru: "Затем он делится ссылкой на проект с другими людьми, и каждый из них записывает, как они поют вместе с исходным видео.",
+        he: "ואז הוא חולק קישור לפרויקט עם אנשים אחרים, וכל אחד מהם מקליט איך הם שרים יחד עם סרטון המקורי.",
+    },
+    "The Chorus service automatically processes all recordings and compiles them into 1 video of everyone singing together.": {
+        ru: "Сервис Chorus автоматически обрабатывает все записи и объединяет их в одно видео, в котором все поют вместе.",
+        he: "שירות Chorus מעבד אוטומטית את כל ההקלטות ומאגד אותם לסרטון אחד של כולם שרים יחד.",
+    },
+    "So, let's start?": {
+        ru: "Итак, начнём?",
+        he: "שנתחיל?",
     },
     // endregion
 

@@ -2,12 +2,12 @@
 
 ## Phase 1: Must do before go prod
 
-1. (feat)   GUIDES!!! (+ a tip about the headsets or 1 ear pod?)
 1. (feat)   Mobile support.
 
 ## Phase 2: Can do after go prod
 
-1. (feat)   Social share/like buttons on the project page and on the result page (add OG tags to make it recognizable).
+1. (feat)   Social share/like buttons on the project page and on the result page
+            (see Next.js for SEO-friendly server-side rendering).
 1. (feat)   Feedback page (+ GitHub link).
 1. (feat)   FAQ page (e.g. will my project be visible to the world?).
 1. (feat)   An option to archive the project (to make it read-only).
