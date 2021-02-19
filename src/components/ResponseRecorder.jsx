@@ -8,7 +8,7 @@ import {translate} from "../locales/translate";
 import {ActionLink} from "./ActionLink";
 import {
     SourceRecorderInstructionsPreRecordCheckList,
-    SourceRecorderInstructionsRecordCheckList
+    SourceRecorderInstructionsRecordCheckList, SourceRecorderInstructionsStartButtonTip
 } from "./SourceRecorder";
 import {Link} from "react-router-dom";
 import {homePageUrl, viewProjectUrl} from "../misc/url";
@@ -50,7 +50,7 @@ export const ResponseRecorder = ({entry}) => {
             </div>
 
             <div className={"block"}>
-                {translate("Use the recorder below - hit the red button to start.")} {translate("Some useful tips:")}
+                {<SourceRecorderInstructionsStartButtonTip isRecorderReady={state !== RecorderState.destroyed}/>} {translate("Some useful tips:")}
                 <ul>
                     <SourceRecorderInstructionsPreRecordCheckList/>
                     <li>{translate("Listen to the original recording once. Try singing along until you see that you can start on time and sing along without major hitches.")}</li>

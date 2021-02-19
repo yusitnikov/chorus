@@ -16,6 +16,7 @@ import {getCurrentLocaleCode} from "../locales/currentLocale";
 import {projectAdminTag} from "../models/Project";
 import {translate} from "../locales/translate";
 import {ActionLink} from "./ActionLink";
+import {useScopedPromise} from "../hooks/useScopedPromise";
 
 export const RecorderState = {
     destroyed: "destroyed",
@@ -67,9 +68,32 @@ export const Recorder = forwardRef(({
     const [player, setPlayer] = useState(null);
     const [originalPlayerConfig, setOriginalPlayerConfig] = useState(null);
 
+    const [isReady, setIsReady] = useState(false);
+    const [, setPermissionsPromise] = useScopedPromise();
+    useEffect(() => {
+        if (window?.navigator?.permissions?.query) {
+            const permissionsPromise = abortablePromise(Promise.all([
+                window.navigator.permissions.query({name: "camera"}),
+                window.navigator.permissions.query({name: "microphone"}),
+            ]));
+
+            setPermissionsPromise(permissionsPromise);
+
+            permissionsPromise.then(([cameraResult, microphoneResult]) => {
+                if (cameraResult.state === "granted" && microphoneResult.state === "granted") {
+                    setIsReady(true);
+                }
+            });
+        }
+    }, []);
+
     const ref = useRef(null);
 
     useEffect(() => {
+        if (!isReady) {
+            return;
+        }
+
         const recorder = Kaltura.ExpressRecorder.create(containerId, {
             serviceUrl: process.env.REACT_APP_SERVICE_URL,
             partnerId: process.env.REACT_APP_PARTNER_ID,
@@ -109,7 +133,7 @@ export const Recorder = forwardRef(({
             resetState();
             setRecorder(null);
         };
-    }, []);
+    }, [isReady]);
 
     useEffect(() => {
         console.log("State changed to", state);
@@ -218,15 +242,27 @@ export const Recorder = forwardRef(({
     return (
         <div className={"Recorder ltr"}>
             <VideoHolder width={width}>
-                <div id={containerId} className={"fill"} ref={ref}/>
+                {!isReady && <div className={"fill flex flex-hcenter flex-vcenter gray-borders border-radius"}>
+                    <button
+                        type={"button"}
+                        className={"input-padding"}
+                        onClick={() => setIsReady(true)}
+                    >
+                        {translate("Start")}
+                    </button>
+                </div>}
 
-                <div className={"Recorder__Children absolute"}>
-                    {state === RecorderState.updateError && <div className={"block transparent-overlay input-padding border-radius"}>
-                        {translate("Failed to save the video.")} <ActionLink className={"link"} onClick={() => setState(RecorderState.updating)}>{translate("Retry")}</ActionLink>
-                    </div>}
+                {isReady && <>
+                    <div id={containerId} className={"fill"} ref={ref}/>
 
-                    {children}
-                </div>
+                    <div className={"Recorder__Children absolute"}>
+                        {state === RecorderState.updateError && <div className={"block transparent-overlay input-padding border-radius"}>
+                            {translate("Failed to save the video.")} <ActionLink className={"link"} onClick={() => setState(RecorderState.updating)}>{translate("Retry")}</ActionLink>
+                        </div>}
+
+                        {children}
+                    </div>
+                </>}
             </VideoHolder>
         </div>
     );

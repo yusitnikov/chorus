@@ -170,6 +170,10 @@ export const phrasesById = {
         ru: "Используйте рекордер ниже - нажмите на красную кнопку, чтобы начать.",
         he: "השתמשו במקליט למטה - לחצו על הכפתור האדום כדי להתחיל.",
     },
+    "Use the recorder below - hit the \"Start\" button to start.": {
+        ru: "Используйте рекордер ниже - нажмите на кнопку \"Начать\", чтобы начать.",
+        he: "השתמשו במקליט למטה - לחצו על הכפתור \"להתחיל\" כדי להתחיל.",
+    },
     "Some useful tips:": {
         ru: "Несколько полезных советов:",
         he: "כמה טיפים שימושיים:",
@@ -321,7 +325,14 @@ export const phrasesById = {
     },
     // endregion
 
-    // region Recorder
+    // region Recorder (component)
+    "Start": {
+        ru: "Начать",
+        he: "להתחיל",
+    },
+    // endregion
+
+    // region Recorder (vendor)
     "Video Recording": {
         ru: "Запись видео",
         he: "הקלטת וידאו",

@@ -10,7 +10,7 @@ import {viewProjectUrl} from "../misc/url";
 import {InlineBlocksHolder} from "./InlineBlocksHolder";
 
 export const SourceRecorder = () => {
-    const [state, setState] = useState(null);
+    const [state, setState] = useState(RecorderState.destroyed);
     const [entryId, setEntryId] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -28,7 +28,7 @@ export const SourceRecorder = () => {
                 {translate("Let's start!")}
             </h3>
 
-            <SourceRecorderInstructions fulfilledSteps={{1: entryId}}/>
+            <SourceRecorderInstructions isRecorderReady={state !== RecorderState.destroyed} fulfilledSteps={{1: entryId}}/>
 
             {!doneRecording && <Recorder onStateChanged={setState} onUploadedEntryIdChanged={setEntryId}/>}
 
@@ -37,7 +37,11 @@ export const SourceRecorder = () => {
     );
 };
 
-export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
+export const SourceRecorderInstructionsStartButtonTip = ({isRecorderReady}) => isRecorderReady
+    ? translate("Use the recorder below - hit the red button to start.")
+    : translate("Use the recorder below - hit the \"Start\" button to start.");
+
+export const SourceRecorderInstructions = ({isRecorderReady = false, fulfilledSteps = {}}) => {
     const [expanded, setExpanded] = useState(true);
 
     return (
@@ -50,7 +54,7 @@ export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
             <SourceRecorderInstructionsStep step={1} done={fulfilledSteps[1]}>
                 {translate("Record your part of the song.")}&nbsp;
                 {!fulfilledSteps[1] && <>
-                    {translate("Use the recorder below - hit the red button to start.")} {translate("Some useful tips:")}
+                    {<SourceRecorderInstructionsStartButtonTip isRecorderReady={isRecorderReady}/>} {translate("Some useful tips:")}
                     <ul>
                         <SourceRecorderInstructionsPreRecordCheckList/>
                         <li>{translate("Don't start singing immediately. Start with a sign of when you're going to start singing instead (e.g. \"two, one, (start singing)\"). It will be easier for your co-recorders to join in time this way.")}</li>
