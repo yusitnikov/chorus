@@ -1,3 +1,5 @@
-.WithLabel {
-    display: inline-flex !important;
+@media (min-width: 660px) {
+    .WithLabel {
+        display: inline-flex !important;
+    }
 }

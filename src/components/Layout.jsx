@@ -9,6 +9,7 @@ import {Flag} from "./Flag";
 import {translate} from "../locales/translate";
 import {createProjectUrl, homePageUrl} from "../misc/url";
 import {usePageTitle} from "../hooks/usePageTitle";
+import {InlineBlocksHolder} from "./InlineBlocksHolder";
 
 export const Layout = ({children, title, plainTitle}) => {
     usePageTitle(plainTitle || title);
@@ -20,23 +21,36 @@ export const Layout = ({children, title, plainTitle}) => {
     return (
         <div className={`App ${isRtl() ? "rtl" : "ltr"}`}>
             <div className={"block input-padding"} style={{backgroundColor: "#eee"}}>
-                <NavLink className={"link nav-link"} exact={true} to={homePageUrl}>{translate("About the Chorus service")}</NavLink>
-                <NavLink className={"link nav-link"} exact={true} to={createProjectUrl}>{translate("Create New Project")}</NavLink>
+                <NavLink className={"link nav-link inline-margin"} exact={true} to={homePageUrl}>
+                    <span className={"desktop-only"}>{translate("About the Chorus service")}</span>
+                    <span className={"mobile-only"}>{translate("About the service")}</span>
+                </NavLink>
 
-                <div className={"nav-link float-right"}>
+                <NavLink className={"link nav-link inline-margin"} exact={true} to={createProjectUrl}>
+                    <span className={"desktop-only"}>{translate("Create New Project")}</span>
+                    <span className={"mobile-only"}>{translate("New Project")}</span>
+                </NavLink>
+
+                <InlineBlocksHolder className={"nav-link float-right"}>
                     {allLocales.map(({code, name}) => (
-                        <ActionLink key={code} className={"inline-block"} onClick={() => setCurrentLocaleCode(code)}>
+                        <ActionLink key={code} className={"inline-margin"} onClick={() => setCurrentLocaleCode(code)}>
                             <Flag code={code} name={name} size={"1em"}/>
                         </ActionLink>
                     ))}
-                </div>
+                </InlineBlocksHolder>
+
+                <div className={"clear-both"}/>
             </div>
 
             <div className={"block input-padding"}>
-                {title && <h1 className={"block"}>{title}</h1>}
+                <div className={"relative"}>
+                    {title && <h1 className={"block"}>{title}</h1>}
 
-                {children}
+                    {children}
+                </div>
             </div>
+
+            <div className={"clear-both"} style={{height: 50}}/>
         </div>
     );
 };

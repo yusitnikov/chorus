@@ -3,7 +3,7 @@ import React, {forwardRef, useCallback, useEffect, useRef, useState} from "react
 import "./Recorder.css";
 
 import {fixWebmDuration, Kaltura, ks} from "../misc/externals";
-import {VideoHolder} from "./VideoHolder";
+import {defaultPlayerWidth, VideoHolder} from "./VideoHolder";
 import {useEventListener} from "../hooks/useEventListener";
 import {useAutoIncrementId} from "../hooks/useAutoIncrementId";
 import {usePlayerCreatedListener} from "../hooks/usePlayerCreatedListener";
@@ -34,6 +34,7 @@ export const Recorder = forwardRef(({
                                         parentEntryId = null,
                                         onStateChanged,
                                         onUploadedEntryIdChanged,
+                                        width = defaultPlayerWidth,
                                         children,
                                     }, recorderRef) => {
     const containerId = "recorder" + useAutoIncrementId();
@@ -215,16 +216,18 @@ export const Recorder = forwardRef(({
     }, [player, originalPlayerConfig, blob]);
 
     return (
-        <VideoHolder className={"inline-block relative ltr"}>
-            <div id={containerId} className={"fill"} ref={ref}/>
+        <div className={"Recorder ltr"}>
+            <VideoHolder width={width}>
+                <div id={containerId} className={"fill"} ref={ref}/>
 
-            <div className={"Recorder__Children absolute"}>
-                {state === RecorderState.updateError && <div className={"block transparent-overlay input-padding border-radius"}>
-                    {translate("Failed to save the video.")} <ActionLink className={"link"} onClick={() => setState(RecorderState.updating)}>{translate("Retry")}</ActionLink>
-                </div>}
+                <div className={"Recorder__Children absolute"}>
+                    {state === RecorderState.updateError && <div className={"block transparent-overlay input-padding border-radius"}>
+                        {translate("Failed to save the video.")} <ActionLink className={"link"} onClick={() => setState(RecorderState.updating)}>{translate("Retry")}</ActionLink>
+                    </div>}
 
-                {children}
-            </div>
-        </VideoHolder>
+                    {children}
+                </div>
+            </VideoHolder>
+        </div>
     );
 });

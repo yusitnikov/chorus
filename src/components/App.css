@@ -1,5 +1,4 @@
-html,
-body {
+html, body, div, h1, h2, h3, h4 {
     margin: 0;
     padding: 0;
 }
@@ -24,31 +23,31 @@ body {
 }
 
 .block,
-.block-margin {
-    margin: 0 0 10px 0;
+.block-margin,
+.inline-block,
+.inline-block-margin {
+    margin-bottom: 10px;
 }
 
 .inline-block {
     display: inline-block;
     vertical-align: top;
-    margin: 0 20px 10px 0;
-}
-.rtl .inline-block {
-    margin: 0 0 10px 20px;
 }
 
-.inline-margin {
-    display: inline;
-    margin: 0 20px 0 0;
+.ltr .inline-block,
+.ltr .inline-block-margin,
+.ltr .inline-margin {
+    margin-right: 20px;
 }
+.rtl .inline-block,
+.rtl .inline-block-margin,
 .rtl .inline-margin {
-    margin: 0 0 0 20px;
+    margin-left: 20px;
 }
 
 .block:last-child,
-.inline-block:last-child,
-.rtl .inline-block:last-child {
-    margin: 0;
+.block-margin:last-child {
+    margin-bottom: 0 !important;
 }
 
 .flex {
@@ -143,7 +142,6 @@ a {
 
 .nav-link {
     display: inline-block;
-    margin: 5px 10px;
     text-decoration: none;
 }
 .nav-link.active {
@@ -153,4 +151,26 @@ a {
 ol,
 ul {
     margin: 0;
+}
+
+.clear-both {
+    clear: both;
+}
+
+@media (min-width: 660px) {
+    .mobile-only {
+        display: none !important;
+    }
+}
+
+@media (max-width: 659px) {
+    .desktop-only {
+        display: none !important;
+    }
+
+    .ltr .mobile-only-block,
+    .rtl .mobile-only-block {
+        display: block;
+        margin-bottom: 10px;
+    }
 }

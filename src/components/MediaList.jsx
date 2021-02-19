@@ -3,13 +3,14 @@ import {Link} from "react-router-dom";
 import {thumbnailUrl} from "../utils/thumbnailUrl";
 import {playerAspectRatio} from "../misc/playerAspectRatio";
 import {viewProjectUrl} from "../misc/url";
+import {InlineBlocksHolder} from "./InlineBlocksHolder";
 
 const itemWidth = 160;
 const itemHeight = itemWidth * playerAspectRatio;
 
 export const MediaList = ({projectId, items = [], AdditionalInfoComponent, nameCallback, urlCallback}) => {
     return (
-        !!items?.length && <>
+        !!items?.length && <InlineBlocksHolder>
             {items.map(entry => (
                 <MediaListItem
                     key={entry.id}
@@ -20,7 +21,7 @@ export const MediaList = ({projectId, items = [], AdditionalInfoComponent, nameC
                     url={urlCallback && urlCallback(entry)}
                 />
             ))}
-        </>
+        </InlineBlocksHolder>
     );
 };
 

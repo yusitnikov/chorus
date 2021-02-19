@@ -19,6 +19,7 @@ import {isRecentlyCreatedProject} from "../../sharedData/recentlyCreatedProjects
 import {SourceRecorderInstructions, SourceRecorderInstructionsCompilationNote} from "../SourceRecorder";
 import {Layout} from "../Layout";
 import {absoluteUrl, currentPageUrl, mediaEmbedUrl, replyUrl, viewProjectUrl} from "../../misc/url";
+import {InlineBlocksHolder} from "../InlineBlocksHolder";
 
 export const ViewPage = () => {
     let {projectId, entryId} = useParams();
@@ -96,6 +97,8 @@ export const ViewPage = () => {
                 <Link to={replyUrl(projectId)} className={"ViewPage__ReplyLink link"}>
                     {translateWithContext("Reply", "verb")}
                 </Link>
+
+                <div className={"clear-both"}/>
             </>}
         >
             {isNewProject && <SourceRecorderInstructions
@@ -109,63 +112,66 @@ export const ViewPage = () => {
 
             {!isNewProject && <SourceRecorderInstructionsCompilationNote/>}
 
-            <div className={"ViewPage__content"}>
-                <div className={"inline-block"}>
-                    <Player entry={entry}/>
-                </div>
+            {/* Warning: the InlineBlocksHolder element can't be combined with .ViewPage__Content, because the latter is a flex. */}
+            <InlineBlocksHolder>
+                <div className={"ViewPage__Content"}>
+                    <div className={"inline-block mobile-only-block"}>
+                        <Player entry={entry}/>
+                    </div>
 
-                <div className={"inline-block"}>
-                    <h2 className={"block"}>
-                        {translate("Share")}
-                    </h2>
-
-                    <ViewPageLinkShare
-                        label={translate("Link to the project:")}
-                        url={currentPageUrl()}
-                        onCopy={() => setProjectLinkCopied(true)}
-                    />
-
-                    <ViewPageLinkShare
-                        label={translate("Reply link:")}
-                        url={absoluteUrl(replyUrl(projectId))}
-                        onCopy={() => setReplyLinkCopied(true)}
-                    />
-
-                    {compilationId && <ViewPageLinkShare
-                        label={translate("Result link:")}
-                        url={absoluteUrl(mediaEmbedUrl(projectId))}
-                    />}
-
-                    <h2 className={"block"}>
-                        {translatePlural(relatedEntries.length, "%u reply", "%u replies")}
-                    </h2>
-
-                    {relatedEntries.length !== 0 && <>
-                        <div className={"block"}>
-                            <MediaList
-                                projectId={projectId}
-                                items={relatedEntries}
-                                nameCallback={item => names[item.id]}
-                            />
-                        </div>
-                    </>}
-
-                    {compilation && <>
+                    <div className={"inline-block mobile-only-block"}>
                         <h2 className={"block"}>
-                            {translate("Compilation")}
+                            {translate("Share")}
                         </h2>
 
-                        <div className={"block"}>
-                            <MediaListItem
-                                projectId={projectId}
-                                entry={compilation}
-                                url={mediaEmbedUrl(projectId)}
-                                openInNewPage={true}
-                            />
-                        </div>
-                    </>}
+                        <ViewPageLinkShare
+                            label={translate("Link to the project:")}
+                            url={currentPageUrl()}
+                            onCopy={() => setProjectLinkCopied(true)}
+                        />
+
+                        <ViewPageLinkShare
+                            label={translate("Reply link:")}
+                            url={absoluteUrl(replyUrl(projectId))}
+                            onCopy={() => setReplyLinkCopied(true)}
+                        />
+
+                        {compilationId && <ViewPageLinkShare
+                            label={translate("Result link:")}
+                            url={absoluteUrl(mediaEmbedUrl(projectId))}
+                        />}
+
+                        <h2 className={"block"}>
+                            {translatePlural(relatedEntries.length, "%u reply", "%u replies")}
+                        </h2>
+
+                        {relatedEntries.length !== 0 && <>
+                            <div className={"block"}>
+                                <MediaList
+                                    projectId={projectId}
+                                    items={relatedEntries}
+                                    nameCallback={item => names[item.id]}
+                                />
+                            </div>
+                        </>}
+
+                        {compilation && <>
+                            <h2 className={"block"}>
+                                {translate("Compilation")}
+                            </h2>
+
+                            <InlineBlocksHolder className={"block"}>
+                                <MediaListItem
+                                    projectId={projectId}
+                                    entry={compilation}
+                                    url={mediaEmbedUrl(projectId)}
+                                    openInNewPage={true}
+                                />
+                            </InlineBlocksHolder>
+                        </>}
+                    </div>
                 </div>
-            </div>
+            </InlineBlocksHolder>
         </Layout>
     );
 };

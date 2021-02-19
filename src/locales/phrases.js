@@ -43,6 +43,10 @@ export const phrasesById = {
         ru: "Создать новый проект",
         he: "צור פרויקט חדש",
     },
+    "New Project": {
+        ru: "Новый проект",
+        he: "פרויקט חדש",
+    },
     // endregion
 
     // region HomePage
@@ -174,6 +178,10 @@ export const phrasesById = {
         ru: "Перед тем, как начать, проверьте настройки камеры/звука.",
         he: "בדקו את הגדרות המצלמה/שמע לפני להתחיל.",
     },
+    "Turn your device into the landscape mode.": {
+        ru: "Поверните ваше устройство в альбомный режим (горизонтально).",
+        he: "הפכו את מכשירכם למצב הנוף.",
+    },
     "Don't start singing immediately. Start with a sign of when you're going to start singing instead (e.g. \"two, one, (start singing)\"). It will be easier for your co-recorders to join in time this way.": {
         ru: "Не начинайте петь сразу. Вместо этого, начните с сигнала о том, когда вы собираетесь начать петь (например, «два, один, (начать петь)»). Таким образом, вашим со-записывающим будет легче присоединиться вовремя.",
         he: "אל תתחילו לשיר מיד. במקום זה, תתחילו בסימן על מתי אתם מתחילים לשיר (למשל \"שתיים, אחד, (להתחיל לשיר)\"). יהיה קל יותר למקליטים השותפים שלך להצטרף בזמן בדרך זו.",
@@ -186,6 +194,10 @@ export const phrasesById = {
         ru: "Пойте чисто. Если вы полны инициатив, но не можете чисто петь - не проблема, просто попросите друга помочь :)",
         he: "תשירו נקי. אם אתם מלאים יוזמות אך אינכם יכולים לשיר נקי - אין בעיה, פשוט תבקשו מחברכם לעזור :)",
     },
+    "Look straight into the camera.": {
+        ru: "Смотрите прямо в камеру.",
+        he: "הסתכלו ישר למצלמה.",
+    },
     "Sing loud.": {
         ru: "Пойте громко.",
         he: "תשירו בקול רם.",
@@ -194,17 +206,29 @@ export const phrasesById = {
         ru: "Прослушайте запись перед загрузкой, убедитесь, что все в порядке.",
         he: "האזינו להקלטה לפני העלאתה, בדקו שהכל בסדר."
     },
-    "Give a name to your project and submit the form. You will be redirected to the project home page.": {
-        ru: "Дайте название вашему проекту и отправьте форму. Вы будете перенаправлены на домашнюю страницу проекта.",
-        he: "תנו שם לפרויקט שלכם והגישו את הטופס. תועברו לדף הבית של הפרויקט.",
+    "Oh, yeah, and don't forget to smile, unless you're recording a very sad song ;)": {
+        ru: "Ах да, и не забывайте улыбаться, если только не записываете очень грустную песню ;)",
+        he: "אה, כן, ואל תשכחו לחייך, אלא אם כן אתם מקליטים שיר עצוב מאוד ;)",
+    },
+    "Give a name to your project and submit the form.": {
+        ru: "Дайте название вашему проекту и отправьте форму.",
+        he: "תנו שם לפרויקט שלכם והגישו את הטופס.",
+    },
+    "You will be redirected to the project home page.": {
+        ru: "Вы будете перенаправлены на домашнюю страницу проекта.",
+        he: "תועברו לדף הבית של הפרויקט.",
     },
     "Important!": {
         ru: "Важно!",
         he: "חשוב!",
     },
-    "Save the link to your project. There's no page with the list of recently created projects, so you will be able to access the project only by the direct link.": {
-        ru: "Сохраните ссылку на свой проект. Нет страницы со списком недавно созданных проектов, так что вы сможете получить доступ к проекту только по прямой ссылке.",
-        he: "שמרו את הקישור לפרויקט שלכם. אין דף עם רשימת הפרויקטים שנוצרו לאחרונה, כך שתוכלו לגשת לפרויקט רק באמצעות הקישור הישיר.",
+    "Save the link to your project.": {
+        ru: "Сохраните ссылку на свой проект.",
+        he: "שמרו את הקישור לפרויקט שלכם.",
+    },
+    "There's no page with the list of recently created projects, so you will be able to access the project only by the direct link.": {
+        ru: "Нет страницы со списком недавно созданных проектов, так что вы сможете получить доступ к проекту только по прямой ссылке.",
+        he: "אין דף עם רשימת הפרויקטים שנוצרו לאחרונה, כך שתוכלו לגשת לפרויקט רק באמצעות הקישור הישיר.",
     },
     "Share the reply link with people that you want to record replies to your video.": {
         ru: "Поделитесь ссылкой для ответа с людьми, от которых вы хотите, чтоб они записали ответ на ваше видео.",

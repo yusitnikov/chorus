@@ -8,7 +8,7 @@ import {EntryNotReadyScreen} from "./EntryNotReadyScreen";
 import {downloadUrl} from "../utils/downloadUrl";
 import {isMediaReady} from "../models/Media";
 
-export const Player = forwardRef(({entry, onPlaybackEnded}, playerRef) => {
+export const Player = forwardRef(({entry, onPlaybackEnded, width= defaultPlayerWidth}, playerRef) => {
     const [player, setPlayer] = useState(null);
 
     const containerId = "player" + useAutoIncrementId();
@@ -76,7 +76,7 @@ export const Player = forwardRef(({entry, onPlaybackEnded}, playerRef) => {
 
     useEventListener(player, player?.Event?.Core?.PLAYBACK_ENDED, onPlaybackEnded);
 
-    return <VideoHolder>
+    return <VideoHolder width={width}>
         <div ref={ref} id={containerId} className={"fill"} style={{display: entryReady ? "block" : "none"}}/>
 
         {!entryReady && <EntryNotReadyScreen thumbnailUrl={entryThumbnailUrl}/>}

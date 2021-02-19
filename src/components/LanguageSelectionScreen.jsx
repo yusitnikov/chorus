@@ -26,12 +26,14 @@ export const LanguageSelectionScreen = ({onLanguageSelected}) => {
 const LanguageSelectionScreenItem = ({code, name, onClick}) => {
     return (
         <ActionLink className={"LanguageSelectionScreenItem"} onClick={() => onClick(code)}>
-            <Flag
-                code={code}
-                name={name}
-                size={100}
-                className={"block"}
-            />
+            <div className={"block"}>
+                <Flag
+                    code={code}
+                    name={name}
+                    size={100}
+                    className={"LanguageSelectionScreenItem__Flag"}
+                />
+            </div>
 
             <div className={"LanguageSelectionScreenItem__Text"}>
                 {name}

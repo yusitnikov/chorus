@@ -5,6 +5,7 @@ import {useScopedPromise} from "../hooks/useScopedPromise";
 import {timeoutPromise} from "../misc/timeoutPromise";
 import {translate} from "../locales/translate";
 import {WithLabel} from "./WithLabel";
+import {InlineBlocksHolder} from "./InlineBlocksHolder";
 
 export const CopyToClipboardInput = ({text, label, labelWidth, inputWidth, onCopy}) => {
     const [copied, setCopied] = useState(false);
@@ -20,32 +21,43 @@ export const CopyToClipboardInput = ({text, label, labelWidth, inputWidth, onCop
     };
 
     return (
-        <div className={"block align-children-top"}>
+        <InlineBlocksHolder className={"block align-children-top"}>
             <WithLabel
                 width={labelWidth}
+                className={"mobile-only-block inline-margin"}
                 labelClassName={"vertical-input-padding"}
                 label={label}
             >
                 <input
                     type={"text"}
                     readOnly={true}
-                    className={"ltr inline-margin input-padding gray-borders border-radius"}
-                    style={{width: inputWidth}}
+                    className={"ltr input-padding gray-borders border-radius"}
+                    style={{
+                        width: inputWidth,
+                        maxWidth: "calc(100% - 22px)",
+                    }}
                     value={text}
                     onFocus={event => event.target.select()}
                     onCopy={handleCopy}
                 />
             </WithLabel>
 
-            <span>
+            <div className={"inline-block"}>
                 <CopyToClipboard text={text} onCopy={handleCopy}>
                     <button type={"button"} className={"inline-margin input-padding gray-borders border-radius"}>
                         {translate("Copy")}
                     </button>
                 </CopyToClipboard>
 
-                {copied && <span>{translate("Copied.")}</span>}
-            </span>
-        </div>
+                <span
+                    style={{
+                        opacity: copied ? 1 : 0,
+                        transition: "opacity 0.5s",
+                    }}
+                >
+                    {translate("Copied.")}
+                </span>
+            </div>
+        </InlineBlocksHolder>
     );
 };

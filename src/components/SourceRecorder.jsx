@@ -7,6 +7,7 @@ import {WithLabel} from "./WithLabel";
 import {Error} from "./errors/Error";
 import {addRecentlyCreatedProject} from "../sharedData/recentlyCreatedProjects";
 import {viewProjectUrl} from "../misc/url";
+import {InlineBlocksHolder} from "./InlineBlocksHolder";
 
 export const SourceRecorder = () => {
     const [state, setState] = useState(null);
@@ -47,22 +48,28 @@ export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
             </summary>
 
             <SourceRecorderInstructionsStep step={1} done={fulfilledSteps[1]}>
-                {translate("Record your part of the song.")} {translate("Use the recorder below - hit the red button to start.")} {translate("Some useful tips:")}
-                <ul>
-                    <SourceRecorderInstructionsPreRecordCheckList/>
-                    <li>{translate("Don't start singing immediately. Start with a sign of when you're going to start singing instead (e.g. \"two, one, (start singing)\"). It will be easier for your co-recorders to join in time this way.")}</li>
-                    <li>{translate("You can even start with a speech to your co-recorders: explain what's your project, how to reply, give some useful tips. You will always be able to cut it later. Just make sure to keep it short: remember, the co-recorders will not be able to skip it while recording their replies.")}</li>
-                    <li>{translate("Sing clear. If you're full of initiatives but can't sing clear - no problem, just ask your friend to help :)")}</li>
-                    <SourceRecorderInstructionsRecordCheckList/>
-                </ul>
+                {translate("Record your part of the song.")}&nbsp;
+                {!fulfilledSteps[1] && <>
+                    {translate("Use the recorder below - hit the red button to start.")} {translate("Some useful tips:")}
+                    <ul>
+                        <SourceRecorderInstructionsPreRecordCheckList/>
+                        <li>{translate("Don't start singing immediately. Start with a sign of when you're going to start singing instead (e.g. \"two, one, (start singing)\"). It will be easier for your co-recorders to join in time this way.")}</li>
+                        <li>{translate("You can even start with a speech to your co-recorders: explain what's your project, how to reply, give some useful tips. You will always be able to cut it later. Just make sure to keep it short: remember, the co-recorders will not be able to skip it while recording their replies.")}</li>
+                        <li>{translate("Sing clear. If you're full of initiatives but can't sing clear - no problem, just ask your friend to help :)")}</li>
+                        <SourceRecorderInstructionsRecordCheckList/>
+                    </ul>
+                </>}
             </SourceRecorderInstructionsStep>
 
             <SourceRecorderInstructionsStep step={2} done={fulfilledSteps[2]}>
-                {translate("Give a name to your project and submit the form. You will be redirected to the project home page.")}
+                {translate("Give a name to your project and submit the form.")}&nbsp;
+                {!fulfilledSteps[2] && translate("You will be redirected to the project home page.")}
             </SourceRecorderInstructionsStep>
 
             <SourceRecorderInstructionsStep step={3} done={fulfilledSteps[3]}>
-                <strong style={{color: "red"}}>{translate("Important!")}</strong> {translate("Save the link to your project. There's no page with the list of recently created projects, so you will be able to access the project only by the direct link.")}
+                <strong style={{color: "red"}}>{translate("Important!")}</strong>&nbsp;
+                {translate("Save the link to your project.")}&nbsp;
+                {!fulfilledSteps[3] && translate("There's no page with the list of recently created projects, so you will be able to access the project only by the direct link.")}
             </SourceRecorderInstructionsStep>
 
             <SourceRecorderInstructionsStep step={4} done={fulfilledSteps[4]}>
@@ -70,7 +77,7 @@ export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
                     {translate("Share the reply link with people that you want to record replies to your video.")}
                 </div>
 
-                <SourceRecorderInstructionsCompilationNote/>
+                {!fulfilledSteps[4] && <SourceRecorderInstructionsCompilationNote/>}
             </SourceRecorderInstructionsStep>
 
             <SourceRecorderInstructionsStep step={5} done={fulfilledSteps[5]}>
@@ -83,13 +90,16 @@ export const SourceRecorderInstructions = ({fulfilledSteps = {}}) => {
 export const SourceRecorderInstructionsPreRecordCheckList = () => (
     <>
         <li>{translate("Check the camera/audio settings before you start.")}</li>
+        <li className={"mobile-only"}>{translate("Turn your device into the landscape mode.")}</li>
     </>
 );
 
 export const SourceRecorderInstructionsRecordCheckList = () => (
     <>
+        <li>{translate("Look straight into the camera.")}</li>
         <li>{translate("Sing loud.")}</li>
         <li>{translate("Listen to the recording before uploading it, check that everything's all right.")}</li>
+        <li>{translate("Oh, yeah, and don't forget to smile, unless you're recording a very sad song ;)")}</li>
     </>
 );
 
@@ -151,7 +161,7 @@ const SourceRecorderForm = ({entryId, onSubmit}) => {
                 {translate("Your video was submitted successfully. What's the name of the project?")}
             </div>
 
-            <div className={"block"}>
+            <InlineBlocksHolder className={"block"}>
                 <input
                     type={"text"}
                     className={"inline-block input-padding gray-borders border-radius"}
@@ -177,7 +187,7 @@ const SourceRecorderForm = ({entryId, onSubmit}) => {
                 {failedToSubmit && <span className={"inline-block input-padding"}>
                     <Error>{translate("Something went wrong. Please try again.")}</Error>
                 </span>}
-            </div>
+            </InlineBlocksHolder>
         </form>
     );
 };

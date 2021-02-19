@@ -6,12 +6,7 @@
 
 .LanguageSelectionScreenItem {
     display: inline-block;
-}
-.ltr .LanguageSelectionScreenItem {
     margin-right: 50px;
-}
-.rtl .LanguageSelectionScreenItem {
-    margin-left: 50px;
 }
 
 .LanguageSelectionScreenItem:last-child {
@@ -20,4 +15,19 @@
 
 .LanguageSelectionScreenItem__Text {
     font-size: 30px;
+}
+
+@media (max-width: 659px) {
+    .LanguageSelectionScreenItem {
+        margin-right: 30px;
+    }
+
+    .LanguageSelectionScreenItem__Flag {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .LanguageSelectionScreenItem__Text {
+        font-size: 20px;
+    }
 }

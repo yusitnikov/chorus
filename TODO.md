@@ -1,9 +1,5 @@
 # TODO
 
-## Phase 1: Must do before go prod
-
-1. (feat)   Mobile support.
-
 ## Phase 2: Can do after go prod
 
 1. (feat)   Social share/like buttons on the project page and on the result page

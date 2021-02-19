@@ -1,10 +1,10 @@
 import React from "react";
 
-export const Flag = ({code, name, size, style = {}, ...imgProps}) => {
+export const Flag = ({code, name, size, className = "", style = {}, ...imgProps}) => {
     return (
         <img
             src={`${process.env.PUBLIC_URL}/flags/${code}.svg`}
-            className={"block LanguageSelectionScreenItem__Flag"}
+            className={`Flag ${className}`}
             title={name}
             alt={name}
             style={{

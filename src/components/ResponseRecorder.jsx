@@ -1,8 +1,9 @@
 import React, {useCallback, useRef, useState} from "react";
 
+import "./ResponseRecorder.css";
+
 import {Recorder, RecorderState} from "./Recorder";
 import {Player} from "./Player";
-import {VideoHolder} from "./VideoHolder";
 import {translate} from "../locales/translate";
 import {ActionLink} from "./ActionLink";
 import {
@@ -11,6 +12,7 @@ import {
 } from "./SourceRecorder";
 import {Link} from "react-router-dom";
 import {homePageUrl, viewProjectUrl} from "../misc/url";
+import {InlineBlocksHolder} from "./InlineBlocksHolder";
 
 export const ResponseRecorder = ({entry}) => {
     const playerRef = useRef(null);
@@ -58,25 +60,28 @@ export const ResponseRecorder = ({entry}) => {
                 </ul>
             </div>
 
-            <div className={"inline-block border-radius"}>
-                <Player
-                    entry={entry}
-                    onPlaybackEnded={onPlaybackEnded}
-                    ref={playerRef}
-                />
-            </div>
+            <InlineBlocksHolder className={"block"}>
+                <div className={"inline-block mobile-only-block border-radius"}>
+                    <Player
+                        entry={entry}
+                        onPlaybackEnded={onPlaybackEnded}
+                        ref={playerRef}
+                    />
+                </div>
 
-            <VideoHolder className={"inline-block relative"}>
-                <Recorder
-                    parentEntryId={entry.id}
-                    onStateChanged={handleStateChange}
-                    ref={recorderRef}
-                >
-                    {state === RecorderState.done && <div className={"ResponseRecorder__Recorder__Done transparent-overlay input-padding border-radius"}>
-                        {translate("Your reply was submitted.")} <ActionLink className={"link"} onClick={() => recorderRef.current?.startRecording()}>{translate("Record one more?")}</ActionLink>
-                    </div>}
-                </Recorder>
-            </VideoHolder>
+                <div className={"inline-block mobile-only-block"}>
+                    <Recorder
+                        parentEntryId={entry.id}
+                        onStateChanged={handleStateChange}
+                        ref={recorderRef}
+                    >
+                        {state === RecorderState.done && <div className={"ResponseRecorder__Recorder__Done transparent-overlay inline-block input-padding border-radius"}>
+                            {translate("Your reply was submitted.")}<br/>
+                            <ActionLink className={"link"} onClick={() => recorderRef.current?.startRecording()}>{translate("Record one more?")}</ActionLink>
+                        </div>}
+                    </Recorder>
+                </div>
+            </InlineBlocksHolder>
         </div>
     );
 };

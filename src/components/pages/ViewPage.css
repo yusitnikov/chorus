@@ -6,7 +6,16 @@
 }
 
 @media (min-width: 1200px) {
-    .ViewPage__content {
+    .ViewPage__Content {
         display: flex;
+    }
+}
+
+@media (max-width: 659px) {
+    .ltr .ViewPage__ReplyLink {
+        float: right;
+    }
+    .rtl .ViewPage__ReplyLink {
+        float: left;
     }
 }

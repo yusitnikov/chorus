@@ -1,0 +1,10 @@
+.InlineBlocksHolder {
+    overflow-x: hidden;
+}
+
+.ltr .InlineBlocksHolder__Inner {
+    margin-right: -20px;
+}
+.rtl .InlineBlocksHolder__Inner {
+    margin-left: -20px;
+}
