@@ -20,6 +20,7 @@ import {SourceRecorderInstructions, SourceRecorderInstructionsCompilationNote} f
 import {Layout} from "../Layout";
 import {absoluteUrl, mediaEmbedUrl, replyUrl, viewProjectUrl} from "../../misc/url";
 import {InlineBlocksHolder} from "../InlineBlocksHolder";
+import {thumbnailUrl} from "../../utils/thumbnailUrl";
 
 export const ViewPage = () => {
     let {projectId, entryId} = useParams();
@@ -100,6 +101,7 @@ export const ViewPage = () => {
 
                 <div className={"clear-both"}/>
             </>}
+            image={thumbnailUrl(entry)}
         >
             {isNewProject && <SourceRecorderInstructions
                 fulfilledSteps={{

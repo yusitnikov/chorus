@@ -6,8 +6,9 @@ import {getProjectCompilationId, isProjectSourceEntry} from "../../models/Projec
 import {translate} from "../../locales/translate";
 import {useLoadMediaById} from "../../models/Media";
 import {PageNotFound} from "../errors/PageNotFound";
-import {usePageTitle} from "../../hooks/usePageTitle";
+import {usePageInfo} from "../../hooks/usePageInfo";
 import {homePageUrl} from "../../misc/url";
+import {thumbnailUrl} from "../../utils/thumbnailUrl";
 
 export const EmbedPage = () => {
     const {entryId} = useParams();
@@ -17,7 +18,7 @@ export const EmbedPage = () => {
     const compilationId = isProject && getProjectCompilationId(entry);
     const [compilation, compilationError, compilationLoaded] = useLoadMediaById(compilationId);
 
-    usePageTitle(entry?.name);
+    usePageInfo(entry?.name, entry && thumbnailUrl(entry));
 
     if (entryError || compilationError || isProject && !compilationId) {
         return <PageNotFound title={translate("Video not found")}/>;

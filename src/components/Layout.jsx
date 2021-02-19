@@ -8,11 +8,11 @@ import {ActionLink} from "./ActionLink";
 import {Flag} from "./Flag";
 import {translate} from "../locales/translate";
 import {createProjectUrl, homePageUrl} from "../misc/url";
-import {usePageTitle} from "../hooks/usePageTitle";
+import {usePageInfo} from "../hooks/usePageInfo";
 import {InlineBlocksHolder} from "./InlineBlocksHolder";
 
-export const Layout = ({children, title, plainTitle}) => {
-    usePageTitle(plainTitle || title);
+export const Layout = ({children, title, plainTitle, image}) => {
+    usePageInfo(plainTitle || title, image);
 
     if (!getCurrentLocaleCode()) {
         return <div className={"ltr"}><LanguageSelectionScreen onLanguageSelected={setCurrentLocaleCode}/></div>;

@@ -5,7 +5,9 @@ import {useLoadMediaById} from "../../models/Media";
 import {translate} from "../../locales/translate";
 import {PageNotFound} from "../errors/PageNotFound";
 import {Layout} from "../Layout";
-import {viewProjectUrl} from "../../misc/url";
+import {replyUrl, viewProjectUrl} from "../../misc/url";
+import {thumbnailUrl} from "../../utils/thumbnailUrl";
+import {getProjectIdByEntry} from "../../models/Project";
 
 export const ReplyPage = () => {
     const {projectId} = useParams();
@@ -20,8 +22,9 @@ export const ReplyPage = () => {
         return <Layout/>;
     }
 
-    if (source.parentEntryId) {
-        return <Redirect to={`/reply/${source.parentEntryId}`}/>;
+    const actualProjectId = source && getProjectIdByEntry(source);
+    if (actualProjectId && actualProjectId !== projectId) {
+        return <Redirect to={replyUrl(actualProjectId)}/>;
     }
 
     return (
@@ -31,6 +34,7 @@ export const ReplyPage = () => {
                 {translate("Reply to ")}
                 <Link to={viewProjectUrl(projectId)} className={"link"}>{source.name}</Link>
             </>}
+            image={thumbnailUrl(source)}
         >
             <ResponseRecorder entry={source}/>
         </Layout>
