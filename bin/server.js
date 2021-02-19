@@ -44,7 +44,9 @@ const processConfigRequest = async(request, response) => {
 
 const processStaticAssestRequest = (request, response) => {
     console.log("    static file!");
-    return fileServer.serve(request, response);
+    return request.url.includes(".")
+        ? fileServer.serve(request, response)
+        : fileServer.serveFile("/index.html", 200, {}, request, response);
 };
 
 const processCompilationRequest = async(entryId, request, response) => {

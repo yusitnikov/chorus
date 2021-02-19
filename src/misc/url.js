@@ -1,8 +1,6 @@
 export const urlByParts = (...parts) => "/" + parts.filter(v => v).join("/");
 
-export const absoluteUrl = (relativeUrl = "") => `${window.location.origin}/#${relativeUrl}`;
-
-export const currentPageUrl = () => window.location.href;
+export const absoluteUrl = (relativeUrl = "") => `${window.location.origin}${relativeUrl}`;
 
 export const homePageUrl = "/";
 

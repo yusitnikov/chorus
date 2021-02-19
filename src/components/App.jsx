@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 
-import {HashRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {HomePage} from "./pages/HomePage";
 import {CreatePage} from "./pages/CreatePage";
 import {ReplyPage} from "./pages/ReplyPage";
@@ -12,7 +12,7 @@ import {PageNotFound} from "./errors/PageNotFound";
 import {createProjectUrl, homePageUrl, mediaEmbedUrl, replyUrl, viewProjectUrl} from "../misc/url";
 
 export const App = () => (
-    <HashRouter>
+    <BrowserRouter>
         <Switch>
             <Route exact={true} path={homePageUrl}>
                 <HomePage/>
@@ -33,5 +33,5 @@ export const App = () => (
                 <PageNotFound/>
             </Route>
         </Switch>
-    </HashRouter>
+    </BrowserRouter>
 );

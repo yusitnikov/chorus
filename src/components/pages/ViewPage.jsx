@@ -18,7 +18,7 @@ import {getCurrentLocaleCode} from "../../locales/currentLocale";
 import {isRecentlyCreatedProject} from "../../sharedData/recentlyCreatedProjects";
 import {SourceRecorderInstructions, SourceRecorderInstructionsCompilationNote} from "../SourceRecorder";
 import {Layout} from "../Layout";
-import {absoluteUrl, currentPageUrl, mediaEmbedUrl, replyUrl, viewProjectUrl} from "../../misc/url";
+import {absoluteUrl, mediaEmbedUrl, replyUrl, viewProjectUrl} from "../../misc/url";
 import {InlineBlocksHolder} from "../InlineBlocksHolder";
 
 export const ViewPage = () => {
@@ -126,7 +126,7 @@ export const ViewPage = () => {
 
                         <ViewPageLinkShare
                             label={translate("Link to the project:")}
-                            url={currentPageUrl()}
+                            url={absoluteUrl(viewProjectUrl(projectId))}
                             onCopy={() => setProjectLinkCopied(true)}
                         />
 
