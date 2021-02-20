@@ -15,6 +15,7 @@ import {ActionLink} from "./ActionLink";
 import {useScopedPromise} from "../hooks/useScopedPromise";
 import {createClientWithKs} from "../misc/kalturaClient";
 import {useIsHead, useLocaleCode, useTranslate} from "../contexts/app";
+import fixWebmDuration from "fix-webm-duration";
 
 export const RecorderState = {
     destroyed: "destroyed",
@@ -157,7 +158,7 @@ export const Recorder = forwardRef(({
             case RecorderState.fixing: {
                 const blob = new Blob(recorder.instance.state.recordedBlobs, { type: "video/webm" });
 
-                const fixedBlobPromise = abortablePromise(new Promise(resolve => window.ysFixWebmDuration(blob, duration, blob => resolve(blob))));
+                const fixedBlobPromise = abortablePromise(new Promise(resolve => fixWebmDuration(blob, duration, blob => resolve(blob))));
                 fixedBlobPromise
                     .then((blob) => mergeState({
                         blob,

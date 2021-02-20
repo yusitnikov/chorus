@@ -54,7 +54,6 @@ export default function App({ Component, pageProps }) {
                     <meta name="theme-color" content="#ffffff"/>
                     <script src="/vendor/express-recorder.js"/>
                     <script src={`${process.env.NEXT_PUBLIC_CDN_URL}/p/${process.env.NEXT_PUBLIC_PARTNER_ID}/embedPlaykitJs/uiconf_id/${process.env.NEXT_PUBLIC_UI_CONF_ID}`}/>
-                    <script src="https://yusitnikov.github.io/fix-webm-duration/fix-webm-duration.js"/>
                     <title/>
                 </Head>
 

@@ -5770,6 +5770,11 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
+fix-webm-duration@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fix-webm-duration/-/fix-webm-duration-1.0.0.tgz#60624281536c2caa86641fe6487f7c92c66f632e"
+  integrity sha512-fwYAr+wYZoeHNPSpHXdNFqUs0EpwAkNzmDM6bHPpVeVN8NNB1jipvUssC4kjhUMb0fML266nEGii3NXHL/eWJw==
+
 flat-cache@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-3.0.4.tgz#61b0338302b2fe9f957dcc32fc2a87f1c3048b11"
@@ -12257,11 +12262,6 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
-
-use-debounce@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-5.2.0.tgz#3cb63f5c46f40092c570356e441dbc016ffb2f8b"
-  integrity sha512-lW4tbPsTnvPKYqOYXp5xZ7SP7No/ARLqqQqoyRKuSzP0HxR9arhSAhznXUZFoNPWDRij8fog+N6sYbjb8c3kzw==
 
 use-subscription@1.5.1:
   version "1.5.1"
