@@ -47,16 +47,18 @@ export default function EntryId({ks, entry, isProject, compilationId, compilatio
         return <PageNotFound title={translate("Video not found")}/>;
     }
 
+    const viewEntry = isProject ? compilation : entry;
+
     return (
         <>
-            <LayoutHead title={entry.name} image={thumbnailUrl(ks, entry)}/>
+            <LayoutHead title={entry.name} image={thumbnailUrl(ks, viewEntry)}/>
 
             <div className={"block input-padding"}>
                 <h1 className={"block"}>
                     {entry.name} - <Link href={homePageUrl}><a className={"link"} target={"_blank"}>Chorus</a></Link>
                 </h1>
 
-                <Player ks={ks} entry={isProject ? compilation : entry}/>
+                <Player ks={ks} entry={viewEntry}/>
             </div>
         </>
     );
