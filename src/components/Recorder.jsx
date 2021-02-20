@@ -6,14 +6,13 @@ import {defaultPlayerWidth, VideoHolder} from "./VideoHolder";
 import {useEventListener} from "../hooks/useEventListener";
 import {usePlayerCreatedListener} from "../hooks/usePlayerCreatedListener";
 import {abortablePromise} from "../misc/abortablePromise";
-import {updateMedia} from "../models/Media";
+import {updateMediaClientSide} from "../models/Media";
 import {enums} from "kaltura-client";
 import {useObjectState} from "../hooks/useObjectState";
 import {phrasesByLocale} from "../locales/phrases";
 import {projectAdminTag} from "../models/Project";
 import {ActionLink} from "./ActionLink";
 import {useScopedPromise} from "../hooks/useScopedPromise";
-import {createClientWithKs} from "../misc/kalturaClient";
 import {useIsHead, useLocaleCode, useTranslate} from "../contexts/app";
 import fixWebmDuration from "fix-webm-duration";
 
@@ -176,8 +175,7 @@ export const Recorder = forwardRef(({
             }
 
             case RecorderState.updating: {
-                const client = createClientWithKs(ks);
-                const entryUpdatePromise = abortablePromise(updateMedia(client, entryId, {
+                const entryUpdatePromise = abortablePromise(updateMediaClientSide(entryId, {
                     displayInSearch: enums.EntryDisplayInSearchType.SYSTEM,
                     parentEntryId,
                     adminTags: `expressrecorder,${projectAdminTag}`,

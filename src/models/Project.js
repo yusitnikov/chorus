@@ -1,4 +1,4 @@
-import {loadMediaList} from "./Media";
+import {clearMediaListCache, loadMediaList} from "./Media";
 import {useTranslate} from "../contexts/app";
 
 export const projectAdminTag = "chorus";
@@ -9,14 +9,25 @@ export const isProjectSourceEntry = (source) => source.adminTags && source.admin
 
 export const getProjectCompilationId = (sourceEntry) => sourceEntry.referenceId;
 
-export const loadProjectReplies = async(client, source, useCache = false) => await loadMediaList(
+const getRepliesCacheKey = (projectId) => `projectReplies:${projectId}`;
+
+export const loadProjectReplies = (client, source, useCache = true) => loadMediaList(
     client,
     {
         parentEntryIdEqual: source.id,
         idNotIn: getProjectCompilationId(source) || undefined,
     },
+    getRepliesCacheKey(source.id),
     useCache
 );
+
+export const clearProjectRepliesCacheByEntry = async(entry) => {
+    const projectId = getProjectIdByEntry(entry);
+
+    if (projectId !== entry.id) {
+        await clearMediaListCache(getRepliesCacheKey(projectId));
+    }
+};
 
 export const useProjectEntryNamesMap = (projectId, compilationId, replies) => {
     const translate = useTranslate();

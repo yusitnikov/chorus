@@ -1,11 +1,10 @@
 import React, {useState} from "react";
 import {Recorder, RecorderState} from "./Recorder";
-import {updateMedia} from "../models/Media";
+import {updateMediaClientSide} from "../models/Media";
 import {WithLabel} from "./WithLabel";
 import {Error} from "./errors/Error";
 import {viewProjectUrl} from "../misc/url";
 import {InlineBlocksHolder} from "./InlineBlocksHolder";
-import {createClientWithKs} from "../misc/kalturaClient";
 import {useTranslate} from "../contexts/app";
 import {useRedirect} from "../hooks/useRedirect";
 import {useAddRecentlyCreatedProject} from "../contexts/recentlyCreatedProjects";
@@ -39,7 +38,7 @@ export const SourceRecorder = ({ks}) => {
 
             {!doneRecording && <Recorder ks={ks} onStateChanged={setState} onUploadedEntryIdChanged={setEntryId}/>}
 
-            {doneRecording && <SourceRecorderForm ks={ks} entryId={entryId} onSubmit={() => setFormSubmitted(true)}/>}
+            {doneRecording && <SourceRecorderForm entryId={entryId} onSubmit={() => setFormSubmitted(true)}/>}
         </>
     );
 };
@@ -170,7 +169,7 @@ const SourceRecorderInstructionsStep = ({step, children, done = false}) => {
     );
 };
 
-const SourceRecorderForm = ({ks, entryId, onSubmit}) => {
+const SourceRecorderForm = ({entryId, onSubmit}) => {
     const translate = useTranslate();
 
     const [entryName, setEntryName] = useState("");
@@ -183,11 +182,10 @@ const SourceRecorderForm = ({ks, entryId, onSubmit}) => {
         setFailedToSubmit(false);
         setFormSubmitted(true);
 
-        const client = createClientWithKs(ks);
-        updateMedia(client, entryId, {name: entryName})
+        updateMediaClientSide(entryId, {name: entryName})
             .then(onSubmit)
-            .catch((error) => {
-                console.error("Failed to update the entry", error);
+            .catch(() => {
+                console.error("Failed to update the entry");
                 setFailedToSubmit(true);
                 setFormSubmitted(false);
             });

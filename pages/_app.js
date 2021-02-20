@@ -12,6 +12,7 @@ const useLocaleCode = (localeCode, callback) => useCallback(
     [localeCode, callback]
 );
 
+// noinspection JSUnusedGlobalSymbols
 export default function App({ Component, pageProps }) {
     const wnd = useWindow();
 

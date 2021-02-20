@@ -1,42 +1,54 @@
 import {enums, objects, services} from "kaltura-client";
 import {createClientWithKs, executeKalturaRequest} from "../misc/kalturaClient";
-import {immediatePromise} from "../misc/immediatePromise";
-
-let mediaGetCache = {};
-let mediaListCache = {};
-
-const clearMediaCache = () => {
-    mediaGetCache = {};
-    mediaListCache = {};
-};
+import {cacheGet, cacheRemove, cacheSet} from "../services/cache";
+import {clearProjectRepliesCacheByEntry} from "./Project";
 
 export const isMediaReady = (entry) => entry.status.toString() === enums.EntryStatus.READY.toString();
 
-export const loadMediaById = (client, id, useCache = false) => {
-    if (useCache && mediaGetCache[id]) {
-        return immediatePromise(mediaGetCache[id]);
-    }
+const getMediaGetCacheKey = (entryId) => `media:get:${entryId}`;
 
-    const resultPromise = executeKalturaRequest(client, services.media.get(id));
+const clearMediaGetCache = (entryId) => cacheRemove(getMediaGetCacheKey(entryId));
+
+const updateMediaGetCache = (entry) => cacheSet(
+    getMediaGetCacheKey(entry.id),
+    entry
+);
+
+export const loadMediaById = async(client, id, useCache = true, waitForSetCache = false) => {
+    const cacheKey = getMediaGetCacheKey(id);
 
     if (useCache) {
-        mediaGetCache[id] = resultPromise;
-        mediaGetCache[id]
-            .then(result => mediaGetCache[id] = result)
-            .catch(() => delete mediaGetCache[id]);
+        const entryFromCache = await cacheGet(cacheKey);
+        if (entryFromCache) {
+            return entryFromCache;
+        }
     }
 
-    return resultPromise;
+    const entry = await executeKalturaRequest(client, services.media.get(id));
+
+    const cacheSetPromise = cacheSet(cacheKey, entry);
+    if (waitForSetCache) {
+        await cacheSetPromise;
+    }
+
+    return entry;
 };
 
-export const loadMediaList = (client, filter, useCache = false) => {
-    const key = JSON.stringify(filter);
+const getMediaListCacheKey = (key) => `media:list:${key}`;
 
-    if (useCache && mediaListCache[key]) {
-        return immediatePromise(mediaListCache[key]);
+export const clearMediaListCache = (key) => cacheRemove(getMediaListCacheKey(key));
+
+export const loadMediaList = async(client, filter, cacheKey, useCache = true) => {
+    const fullCacheKey = getMediaListCacheKey(cacheKey);
+
+    if (useCache) {
+        const objectsFromCache = await cacheGet(fullCacheKey);
+        if (objectsFromCache) {
+            return objectsFromCache;
+        }
     }
 
-    const objectsPromise = executeKalturaRequest(client, services.media.listAction(
+    const objectsFromApi = await executeKalturaRequest(client, services.media.listAction(
         new objects.MediaEntryFilter({
             orderBy: enums.MediaEntryOrderBy.CREATED_AT_ASC,
             statusIn: "1,2",
@@ -45,25 +57,19 @@ export const loadMediaList = (client, filter, useCache = false) => {
         new objects.FilterPager({pageSize: 500})
     )).then(response => response.objects);
 
-    if (useCache) {
-        mediaListCache[key] = objectsPromise;
-        objectsPromise
-            .then(objects => {
-                mediaListCache[key] = objects;
-                for (const entry of objects) {
-                    mediaGetCache[entry.id] = entry;
-                }
-            })
-            .catch(() => delete mediaListCache[key]);
+    // Don't wait for the cache promises
+    cacheSet(fullCacheKey, objectsFromApi);
+    for (const entry of objectsFromApi) {
+        updateMediaGetCache(entry);
     }
 
-    return objectsPromise;
+    return objectsFromApi;
 };
 
 export const addMedia = async(client, data, contentPath) => {
-    clearMediaCache();
-
     let entry = await executeKalturaRequest(client, services.media.add(new objects.MediaEntry(data)));
+
+    await clearProjectRepliesCacheByEntry(entry);
 
     if (contentPath) {
         let uploadToken = await executeKalturaRequest(client, services.uploadToken.add(new objects.UploadToken()));
@@ -73,19 +79,39 @@ export const addMedia = async(client, data, contentPath) => {
         uploadToken = await executeKalturaRequest(uploadClient, services.uploadToken.upload(uploadToken.id, contentPath));
 
         entry = await executeKalturaRequest(client, services.media.addContent(entry.id, new objects.UploadedFileTokenResource({token: uploadToken.id})));
+
+        await clearProjectRepliesCacheByEntry(entry);
     }
 
     return entry;
 };
 
-export const updateMedia = (client, id, data) => {
-    clearMediaCache();
+export const updateMedia = async(client, id, data) => {
+    const entry = await executeKalturaRequest(client, services.media.update(id, new objects.MediaEntry(data)));
 
-    return executeKalturaRequest(client, services.media.update(id, new objects.MediaEntry(data)));
+    await updateMediaGetCache(entry);
+    await clearProjectRepliesCacheByEntry(entry);
+
+    return entry;
 };
 
-export const deleteMedia = (client, id) => {
-    clearMediaCache();
+export const updateMediaClientSide = (id, data) => fetch(
+    `/api/update/${id}`,
+    {
+        method: "POST",
+        body: JSON.stringify(data),
+    }
+).then(data => data.json());
 
-    return executeKalturaRequest(client, services.media.deleteAction(id));
+export const deleteMedia = async(client, id) => {
+    try {
+        const entry = await loadMediaById(client, id, true, true);
+        await clearProjectRepliesCacheByEntry(entry);
+    } catch (error) {
+        // Ignore
+    }
+
+    await executeKalturaRequest(client, services.media.deleteAction(id));
+
+    clearMediaGetCache(id);
 };

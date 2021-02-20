@@ -1,4 +1,5 @@
 import {Client, Configuration, enums, services} from "kaltura-client";
+import {cacheGetOrCalc} from "../services/cache";
 
 export const createClientNoKs = (timeout) => {
     const configuration = new Configuration();
@@ -20,14 +21,19 @@ export const executeKalturaRequest = (client, request) => new Promise((resolve, 
         .execute(client);
 });
 
-export const createKs = (admin) => executeKalturaRequest(createClientNoKs(), services.session.start(
-    process.env.ADMIN_SECRET,
-    "chorus",
-    admin ? enums.SessionType.ADMIN : enums.SessionType.USER,
-    process.env.NEXT_PUBLIC_PARTNER_ID,
-    86400,
-    admin ? "disableentitlement" : "editadmintags:*"
-));
+export const createKs = (admin) => cacheGetOrCalc(
+    `ks:${admin ? "admin" : "user"}`,
+    () => executeKalturaRequest(createClientNoKs(), services.session.start(
+        process.env.ADMIN_SECRET,
+        "chorus",
+        admin ? enums.SessionType.ADMIN : enums.SessionType.USER,
+        process.env.NEXT_PUBLIC_PARTNER_ID,
+        86400,
+        admin ? "disableentitlement" : "editadmintags:*"
+    )),
+    false,
+    3600
+);
 
 export const createClientWithKs = (ks, timeout) => {
     const client = createClientNoKs(timeout);

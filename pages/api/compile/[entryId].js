@@ -31,11 +31,11 @@ export async function compileByEntryId(entryId) {
         const ks = await createKs(true);
         const client = createClientWithKs(ks);
 
-        const entry = await loadMediaById(client, entryId);
+        const entry = await loadMediaById(client, entryId, false);
 
         const projectId = getProjectIdByEntry(entry);
         console.log(`    project ID is ${projectId}`);
-        const source = projectId === entryId ? entry : await loadMediaById(client, projectId);
+        const source = projectId === entryId ? entry : await loadMediaById(client, projectId, false);
 
         if (!isProjectSourceEntry(source)) {
             console.log("    The entry is not a Chorus project, skipping");
@@ -49,7 +49,7 @@ export async function compileByEntryId(entryId) {
             return;
         }
 
-        let replies = await loadProjectReplies(client, source);
+        let replies = await loadProjectReplies(client, source, false);
         if (!replies.length) {
             console.log("    There are no replies yet, skipping");
             return;
