@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./LanguageSelectionScreen.css";
+import styles from "./LanguageSelectionScreen.module.css";
 import {allLocales} from "../locales/allLocales";
 import {ActionLink} from "./ActionLink";
 import {Flag} from "./Flag";
@@ -16,7 +16,7 @@ export const LanguageSelectionScreen = ({onLanguageSelected}) => {
                 </div>
             </div>
 
-            <div className={"LanguageSelectionScreen__Attribution"}>
+            <div className={styles.attribution}>
                 Icons made by <a href="https://www.freepik.com" target={"_blank"} title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" target={"_blank"} title="Flaticon">www.flaticon.com</a>
             </div>
         </>
@@ -25,17 +25,17 @@ export const LanguageSelectionScreen = ({onLanguageSelected}) => {
 
 const LanguageSelectionScreenItem = ({code, name, onClick}) => {
     return (
-        <ActionLink className={"LanguageSelectionScreenItem"} onClick={() => onClick(code)}>
+        <ActionLink className={styles.item} onClick={() => onClick(code)}>
             <div className={"block"}>
                 <Flag
                     code={code}
                     name={name}
                     size={100}
-                    className={"LanguageSelectionScreenItem__Flag"}
+                    className={styles.itemFlag}
                 />
             </div>
 
-            <div className={"LanguageSelectionScreenItem__Text"}>
+            <div className={styles.itemText}>
                 {name}
             </div>
         </ActionLink>

@@ -1,21 +1,21 @@
-.ltr .ViewPage__ReplyLink {
+:global(.ltr) .replyLink {
     margin-left: 50px;
 }
-.rtl .ViewPage__ReplyLink {
+:global(.rtl) .replyLink {
     margin-right: 50px;
 }
 
 @media (min-width: 1200px) {
-    .ViewPage__Content {
+    .content {
         display: flex;
     }
 }
 
 @media (max-width: 659px) {
-    .ltr .ViewPage__ReplyLink {
+    :global(.ltr) .replyLink {
         float: right;
     }
-    .rtl .ViewPage__ReplyLink {
+    :global(.rtl) .replyLink {
         float: left;
     }
 }

@@ -3,11 +3,13 @@ import React, {useState} from "react";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import {useScopedPromise} from "../hooks/useScopedPromise";
 import {timeoutPromise} from "../misc/timeoutPromise";
-import {translate} from "../locales/translate";
 import {WithLabel} from "./WithLabel";
 import {InlineBlocksHolder} from "./InlineBlocksHolder";
+import {useTranslate} from "../contexts/app";
 
 export const CopyToClipboardInput = ({text, label, labelWidth, inputWidth, onCopy}) => {
+    const translate = useTranslate();
+
     const [copied, setCopied] = useState(false);
     const [, setResetCopiedPromise] = useScopedPromise();
 

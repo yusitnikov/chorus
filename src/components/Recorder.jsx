@@ -1,22 +1,20 @@
 import React, {forwardRef, useCallback, useEffect, useRef, useState} from "react";
 
-import "./Recorder.css";
+import styles from "./Recorder.module.css";
 
-import {fixWebmDuration, Kaltura, ks} from "../misc/externals";
 import {defaultPlayerWidth, VideoHolder} from "./VideoHolder";
 import {useEventListener} from "../hooks/useEventListener";
-import {useAutoIncrementId} from "../hooks/useAutoIncrementId";
 import {usePlayerCreatedListener} from "../hooks/usePlayerCreatedListener";
 import {abortablePromise} from "../misc/abortablePromise";
 import {updateMedia} from "../models/Media";
 import {enums} from "kaltura-client";
 import {useObjectState} from "../hooks/useObjectState";
 import {phrasesByLocale} from "../locales/phrases";
-import {getCurrentLocaleCode} from "../locales/currentLocale";
 import {projectAdminTag} from "../models/Project";
-import {translate} from "../locales/translate";
 import {ActionLink} from "./ActionLink";
 import {useScopedPromise} from "../hooks/useScopedPromise";
+import {createClientWithKs} from "../misc/kalturaClient";
+import {useIsHead, useLocaleCode, useTranslate} from "../contexts/app";
 
 export const RecorderState = {
     destroyed: "destroyed",
@@ -32,13 +30,19 @@ export const RecorderState = {
 };
 
 export const Recorder = forwardRef(({
+                                        ks,
                                         parentEntryId = null,
                                         onStateChanged,
                                         onUploadedEntryIdChanged,
                                         width = defaultPlayerWidth,
                                         children,
                                     }, recorderRef) => {
-    const containerId = "recorder" + useAutoIncrementId();
+    const isHead = useIsHead();
+
+    const containerId = "recorder";
+
+    const translate = useTranslate();
+    const localeCode = useLocaleCode();
 
     const initialState = {
         state: RecorderState.destroyed,
@@ -90,17 +94,17 @@ export const Recorder = forwardRef(({
     const ref = useRef(null);
 
     useEffect(() => {
-        if (!isReady) {
+        if (!isReady || isHead) {
             return;
         }
 
-        const recorder = Kaltura.ExpressRecorder.create(containerId, {
-            serviceUrl: process.env.REACT_APP_SERVICE_URL,
-            partnerId: process.env.REACT_APP_PARTNER_ID,
+        const recorder = window.Kaltura.ExpressRecorder.create(containerId, {
+            serviceUrl: process.env.NEXT_PUBLIC_SERVICE_URL,
+            partnerId: process.env.NEXT_PUBLIC_PARTNER_ID,
             ks,
             app: "chorus",
             showUploadUI: true,
-            translations: phrasesByLocale[getCurrentLocaleCode()] || {},
+            translations: phrasesByLocale[localeCode] || {},
         });
 
         // Fix the library bug - it doesn't trigger events when calling recordAgain()
@@ -133,7 +137,7 @@ export const Recorder = forwardRef(({
             resetState();
             setRecorder(null);
         };
-    }, [isReady]);
+    }, [isReady, isHead]);
 
     useEffect(() => {
         console.log("State changed to", state);
@@ -153,7 +157,7 @@ export const Recorder = forwardRef(({
             case RecorderState.fixing: {
                 const blob = new Blob(recorder.instance.state.recordedBlobs, { type: "video/webm" });
 
-                const fixedBlobPromise = abortablePromise(new Promise(resolve => fixWebmDuration(blob, duration, blob => resolve(blob))));
+                const fixedBlobPromise = abortablePromise(new Promise(resolve => window.ysFixWebmDuration(blob, duration, blob => resolve(blob))));
                 fixedBlobPromise
                     .then((blob) => mergeState({
                         blob,
@@ -171,7 +175,8 @@ export const Recorder = forwardRef(({
             }
 
             case RecorderState.updating: {
-                const entryUpdatePromise = abortablePromise(updateMedia(entryId, {
+                const client = createClientWithKs(ks);
+                const entryUpdatePromise = abortablePromise(updateMedia(client, entryId, {
                     displayInSearch: enums.EntryDisplayInSearchType.SYSTEM,
                     parentEntryId,
                     adminTags: `expressrecorder,${projectAdminTag}`,
@@ -240,7 +245,7 @@ export const Recorder = forwardRef(({
     }, [player, originalPlayerConfig, blob]);
 
     return (
-        <div className={"Recorder ltr"}>
+        <div className={`${styles.component} ltr`}>
             <VideoHolder width={width}>
                 {!isReady && <div className={"fill flex flex-hcenter flex-vcenter gray-borders border-radius"}>
                     <button
@@ -255,7 +260,7 @@ export const Recorder = forwardRef(({
                 {isReady && <>
                     <div id={containerId} className={"fill"} ref={ref}/>
 
-                    <div className={"Recorder__Children absolute"}>
+                    <div className={`${styles.children} absolute`}>
                         {state === RecorderState.updateError && <div className={"block transparent-overlay input-padding border-radius"}>
                             {translate("Failed to save the video.")} <ActionLink className={"link"} onClick={() => setState(RecorderState.updating)}>{translate("Retry")}</ActionLink>
                         </div>}

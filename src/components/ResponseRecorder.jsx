@@ -1,20 +1,20 @@
 import React, {useCallback, useRef, useState} from "react";
 
-import "./ResponseRecorder.css";
-
 import {Recorder, RecorderState} from "./Recorder";
 import {Player} from "./Player";
-import {translate} from "../locales/translate";
 import {ActionLink} from "./ActionLink";
 import {
     SourceRecorderInstructionsPreRecordCheckList,
     SourceRecorderInstructionsRecordCheckList, SourceRecorderInstructionsStartButtonTip
 } from "./SourceRecorder";
-import {Link} from "react-router-dom";
 import {homePageUrl, viewProjectUrl} from "../misc/url";
 import {InlineBlocksHolder} from "./InlineBlocksHolder";
+import Link from "next/link";
+import {useTranslate} from "../contexts/app";
 
-export const ResponseRecorder = ({entry}) => {
+export const ResponseRecorder = ({ks, entry}) => {
+    const translate = useTranslate();
+
     const playerRef = useRef(null);
 
     const recorderRef = useRef(null);
@@ -41,12 +41,12 @@ export const ResponseRecorder = ({entry}) => {
         <div>
             <div className={"block"}>
                 {translate("If you got to this page, you were asked by your friend or colleague to join their Chorus project: they recorded a song that you can see in the player below, and ask you to record yourself singing it together with them.")}&nbsp;
-                <Link className={"link"} to={homePageUrl} target={"_blank"}>{translate("Learn more about the Chorus service")}</Link>
+                <Link href={homePageUrl}><a className={"link"} target={"_blank"}>{translate("Learn more about the Chorus service")}</a></Link>
             </div>
 
             <div className={"block"}>
                 {translate("Recordings of all project participants will be automatically compiled into 1 video of everyone singing together.")}&nbsp;
-                <Link className={"link"} to={viewProjectUrl(entry.id)}>{translate("See other replies")}</Link>
+                <Link href={viewProjectUrl(entry.id)}><a className={"link"}>{translate("See other replies")}</a></Link>
             </div>
 
             <div className={"block"}>
@@ -63,6 +63,7 @@ export const ResponseRecorder = ({entry}) => {
             <InlineBlocksHolder className={"block"}>
                 <div className={"inline-block mobile-only-block border-radius"}>
                     <Player
+                        ks={ks}
                         entry={entry}
                         onPlaybackEnded={onPlaybackEnded}
                         ref={playerRef}
@@ -71,6 +72,7 @@ export const ResponseRecorder = ({entry}) => {
 
                 <div className={"inline-block mobile-only-block"}>
                     <Recorder
+                        ks={ks}
                         parentEntryId={entry.id}
                         onStateChanged={handleStateChange}
                         ref={recorderRef}

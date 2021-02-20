@@ -17,24 +17,23 @@
     "http": "^0.0.1-security",
     "https": "^1.0.0",
     "kaltura-client": "^16.14.0",
+    "next": "^10.0.7",
     "node-static": "^0.7.11",
     "react": "^17.0.1",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.1",
-    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "url": "^0.11.0",
     "use-debounce": "^5.2.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.28"
   },
   "scripts": {
-    "es-node": "babel-node --presets @babel/preset-env -r dotenv/config",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "server": "yarn es-node bin/server",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "server": "node bin/server",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "eslintConfig": {
     "extends": [

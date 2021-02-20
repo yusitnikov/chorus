@@ -1,5 +1,5 @@
 import {phrasesById} from "./phrases";
-import {getCurrentLocaleCode, getCurrentLocaleObject} from "./currentLocale";
+import {getCurrentLocaleObject} from "./currentLocale";
 import {getDefaultPluralFormIndex} from "./allLocales";
 
 const substituteArgs = (messageId, ...args) => {
@@ -10,27 +10,27 @@ const substituteArgs = (messageId, ...args) => {
     return messageId;
 };
 
-export const translate = (messageId, ...args) => {
+export const translate = (localeCode, messageId, ...args) => {
     const translations = phrasesById[messageId];
 
     if (!translations) {
         console.warn(`Warning: translation is missing for the phrase "${messageId}"`);
     }
 
-    return substituteArgs(translations && translations[getCurrentLocaleCode()] || messageId, ...args);
+    return substituteArgs(translations && translations[localeCode] || messageId, ...args);
 };
 
-export const translateWithContext = (messageId, contextId, ...args) => {
+export const translateWithContext = (localeCode, messageId, contextId, ...args) => {
     const fullMessageId = `${messageId}|${contextId}`;
-    let translation = translate(fullMessageId);
+    let translation = translate(localeCode, fullMessageId);
     if (translation === fullMessageId) {
         translation = messageId;
     }
     return substituteArgs(translation, ...args);
 };
 
-export const translatePlural = (n, messageIdSingle, messageIdPlural, ...args) => {
-    let messageIdForms = translate(messageIdSingle);
+export const translatePlural = (localeCode, n, messageIdSingle, messageIdPlural, ...args) => {
+    let messageIdForms = translate(localeCode, messageIdSingle);
 
     if (typeof messageIdForms === "string") {
         messageIdForms = [messageIdSingle, messageIdPlural, messageIdPlural];

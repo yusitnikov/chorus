@@ -1,10 +1,10 @@
 import React from "react";
 
-import "./Error.css";
+import styles from "./Error.module.css";
 
 export const Error = ({children, className = "", ...divProps}) => (
     <div
-        className={`Error ${className}`}
+        className={`${styles.component} ${className}`}
         {...divProps}
     >
         {children}

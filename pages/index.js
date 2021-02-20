@@ -1,14 +1,20 @@
-import React from "react";
+import {useEffect} from "react";
+import {Layout} from "../src/components/Layout";
+import {createProjectUrl} from "../src/misc/url";
+import {useRouter} from "next/router";
+import Link from "next/link";
+import {useTranslate} from "../src/contexts/app";
 
-import {Link, Redirect} from "react-router-dom";
-import {translate} from "../../locales/translate";
-import {Layout} from "../Layout";
-import {createProjectUrl} from "../../misc/url";
+export default function Index() {
+    const translate = useTranslate();
 
-export const HomePage = () => {
-    if (window.location.hash) {
-        return <Redirect to={window.location.hash.replace("#", "")}/>;
-    }
+    const router = useRouter();
+
+    useEffect(() => {
+        if (window.location.hash) {
+            router.replace(window.location.hash.replace("#", ""));
+        }
+    }, [router]);
 
     return (
         <Layout title={translate("About the service")}>
@@ -32,7 +38,9 @@ export const HomePage = () => {
             </h2>
 
             <div className={"block"}>
-                <Link className={"link"} to={createProjectUrl}>{translate("Create New Project")}</Link>
+                <Link href={createProjectUrl}>
+                    <a className={"link"}>{translate("Create New Project")}</a>
+                </Link>
             </div>
         </Layout>
     )

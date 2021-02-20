@@ -1,0 +1,10 @@
+.component {
+    overflow-x: hidden;
+}
+
+:global(.ltr) .inner {
+    margin-right: -20px;
+}
+:global(.rtl) .inner {
+    margin-left: -20px;
+}

@@ -1,7 +1,5 @@
 import {loadMediaList} from "./Media";
-import {useLoader} from "../hooks/useLoader";
-import {immediatePromise} from "../misc/immediatePromise";
-import {translate} from "../locales/translate";
+import {useTranslate} from "../contexts/app";
 
 export const projectAdminTag = "chorus";
 
@@ -11,19 +9,18 @@ export const isProjectSourceEntry = (source) => source.adminTags && source.admin
 
 export const getProjectCompilationId = (sourceEntry) => sourceEntry.referenceId;
 
-export const loadProjectReplies = async(source, useCache = false) => await loadMediaList(
+export const loadProjectReplies = async(client, source, useCache = false) => await loadMediaList(
+    client,
     {
         parentEntryIdEqual: source.id,
         idNotIn: getProjectCompilationId(source) || undefined,
     },
     useCache
 );
-export const useLoadProjectReplies = (source) => useLoader(
-    () => source ? loadProjectReplies(source, true) : immediatePromise(undefined),
-    [source]
-);
 
-export const getProjectEntryNamesMap = (projectId, compilationId, replies) => {
+export const useProjectEntryNamesMap = (projectId, compilationId, replies) => {
+    const translate = useTranslate();
+
     const names = {};
 
     if (projectId) {

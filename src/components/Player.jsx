@@ -1,31 +1,29 @@
 import React, {forwardRef, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {defaultPlayerWidth, VideoHolder} from "./VideoHolder";
-import {KalturaPlayer, ks} from "../misc/externals";
 import {useEventListener} from "../hooks/useEventListener";
-import {useAutoIncrementId} from "../hooks/useAutoIncrementId";
 import {thumbnailUrl} from "../utils/thumbnailUrl";
 import {EntryNotReadyScreen} from "./EntryNotReadyScreen";
 import {downloadUrl} from "../utils/downloadUrl";
 import {isMediaReady} from "../models/Media";
 
-export const Player = forwardRef(({entry, onPlaybackEnded, width= defaultPlayerWidth}, playerRef) => {
+export const Player = forwardRef(({ks, entry, onPlaybackEnded, width= defaultPlayerWidth}, playerRef) => {
     const [player, setPlayer] = useState(null);
 
-    const containerId = "player" + useAutoIncrementId();
+    const containerId = "player";
     const ref = useRef(null);
 
     const entryReady = isMediaReady(entry);
     const entryDownloadUrl = downloadUrl(entry, ks);
-    const entryThumbnailUrl = thumbnailUrl(entry, defaultPlayerWidth, 1);
+    const entryThumbnailUrl = thumbnailUrl(ks, entry, defaultPlayerWidth, 1);
 
     useEffect(() => {
-        const player = KalturaPlayer.setup({
+        const player = window.KalturaPlayer.setup({
             targetId: containerId,
             provider: {
-                partnerId: process.env.REACT_APP_PARTNER_ID,
+                partnerId: process.env.NEXT_PUBLIC_PARTNER_ID,
                 env: {
-                    serviceUrl: process.env.REACT_APP_SERVICE_URL + "/api_v3",
-                    cdnUrl: process.env.REACT_APP_CDN_URL,
+                    serviceUrl: process.env.NEXT_PUBLIC_SERVICE_URL + "/api_v3",
+                    cdnUrl: process.env.NEXT_PUBLIC_CDN_URL,
                 },
             },
             playback: {
@@ -79,6 +77,6 @@ export const Player = forwardRef(({entry, onPlaybackEnded, width= defaultPlayerW
     return <VideoHolder width={width}>
         <div ref={ref} id={containerId} className={"fill"} style={{display: entryReady ? "block" : "none"}}/>
 
-        {!entryReady && <EntryNotReadyScreen thumbnailUrl={entryThumbnailUrl}/>}
+        {!entryReady && <EntryNotReadyScreen thumbnailUrl={thumbnailUrl(ks, entry, defaultPlayerWidth, 3)}/>}
     </VideoHolder>;
 });

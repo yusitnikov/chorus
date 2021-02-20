@@ -1,18 +1,36 @@
-import {Client, Configuration} from "kaltura-client";
-import {ks} from "./externals";
+import {Client, Configuration, enums, services} from "kaltura-client";
 
-export const kalturaConfiguration = new Configuration();
-kalturaConfiguration.serviceUrl = process.env.REACT_APP_SERVICE_URL;
-// server uses it for uploads, so set a very big timeout
-kalturaConfiguration.timeout = 1800000;
+export const createClientNoKs = (timeout) => {
+    const configuration = new Configuration();
+    configuration.serviceUrl = process.env.NEXT_PUBLIC_SERVICE_URL;
+    if (timeout) {
+        configuration.timeout = timeout;
+    }
 
-export const kalturaClient = new Client(kalturaConfiguration);
-kalturaClient.shouldLog = false;
-kalturaClient.setClientTag("chorus");
-kalturaClient.setKs(ks);
+    const client = new Client(configuration);
+    client.shouldLog = false;
+    client.setClientTag("chorus");
 
-export const executeKalturaRequest = request => new Promise((resolve, reject) => {
+    return client;
+};
+
+export const executeKalturaRequest = (client, request) => new Promise((resolve, reject) => {
     request
         .completion((success, response) => (success ? resolve : reject)(response))
-        .execute(kalturaClient);
+        .execute(client);
 });
+
+export const createKs = (admin) => executeKalturaRequest(createClientNoKs(), services.session.start(
+    process.env.ADMIN_SECRET,
+    "chorus",
+    admin ? enums.SessionType.ADMIN : enums.SessionType.USER,
+    process.env.NEXT_PUBLIC_PARTNER_ID,
+    86400,
+    admin ? "disableentitlement" : "editadmintags:*"
+));
+
+export const createClientWithKs = (ks, timeout) => {
+    const client = createClientNoKs(timeout);
+    client.setKs(ks);
+    return client;
+};

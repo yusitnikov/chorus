@@ -1,15 +1,15 @@
 import React from "react";
 
-import "./WithLabel.css";
+import styles from "./WithLabel.module.css";
 
 export const WithLabel = ({label, width, bold = false, className = "", labelClassName = "", children, ...labelProps}) => {
     return (
         <label
-            className={`WithLabel ${className}`}
+            className={`${styles.component} ${className}`}
             {...labelProps}
         >
             <div
-                className={`WithLabel__Label ${labelClassName}`}
+                className={labelClassName}
                 style={{
                     width,
                     flex: `0 0 ${width}px`,
@@ -17,7 +17,8 @@ export const WithLabel = ({label, width, bold = false, className = "", labelClas
             >
                 {bold ? <strong>{label}</strong> : label}
             </div>
-            <div className={"WithLabel__Content"}>
+
+            <div>
                 {children}
             </div>
         </label>

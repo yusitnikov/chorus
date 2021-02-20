@@ -1,6 +1,5 @@
 import {enums, objects, services} from "kaltura-client";
-import {executeKalturaRequest} from "../misc/kalturaClient";
-import {useLoader} from "../hooks/useLoader";
+import {createClientWithKs, executeKalturaRequest} from "../misc/kalturaClient";
 import {immediatePromise} from "../misc/immediatePromise";
 
 let mediaGetCache = {};
@@ -13,12 +12,12 @@ const clearMediaCache = () => {
 
 export const isMediaReady = (entry) => entry.status.toString() === enums.EntryStatus.READY.toString();
 
-export const loadMediaById = (id, useCache = false) => {
+export const loadMediaById = (client, id, useCache = false) => {
     if (useCache && mediaGetCache[id]) {
         return immediatePromise(mediaGetCache[id]);
     }
 
-    const resultPromise = executeKalturaRequest(services.media.get(id));
+    const resultPromise = executeKalturaRequest(client, services.media.get(id));
 
     if (useCache) {
         mediaGetCache[id] = resultPromise;
@@ -29,16 +28,15 @@ export const loadMediaById = (id, useCache = false) => {
 
     return resultPromise;
 };
-export const useLoadMediaById = (id) => useLoader(() => id ? loadMediaById(id, true) : immediatePromise(undefined), [id]);
 
-export const loadMediaList = (filter, useCache = false) => {
+export const loadMediaList = (client, filter, useCache = false) => {
     const key = JSON.stringify(filter);
 
     if (useCache && mediaListCache[key]) {
         return immediatePromise(mediaListCache[key]);
     }
 
-    const objectsPromise = executeKalturaRequest(services.media.listAction(
+    const objectsPromise = executeKalturaRequest(client, services.media.listAction(
         new objects.MediaEntryFilter({
             orderBy: enums.MediaEntryOrderBy.CREATED_AT_ASC,
             statusIn: "1,2",
@@ -61,30 +59,33 @@ export const loadMediaList = (filter, useCache = false) => {
 
     return objectsPromise;
 };
-export const useLoadMediaList = (filter) => useLoader(() => filter ? loadMediaList(filter) : immediatePromise(undefined), [JSON.stringify(filter)]);
 
-export const addMedia = async(data, contentPath) => {
+export const addMedia = async(client, data, contentPath) => {
     clearMediaCache();
 
-    let entry = await executeKalturaRequest(services.media.add(new objects.MediaEntry(data)));
+    let entry = await executeKalturaRequest(client, services.media.add(new objects.MediaEntry(data)));
 
     if (contentPath) {
-        let uploadToken = await executeKalturaRequest(services.uploadToken.add(new objects.UploadToken()));
-        uploadToken = await executeKalturaRequest(services.uploadToken.upload(uploadToken.id, contentPath));
-        entry = await executeKalturaRequest(services.media.addContent(entry.id, new objects.UploadedFileTokenResource({token: uploadToken.id})));
+        let uploadToken = await executeKalturaRequest(client, services.uploadToken.add(new objects.UploadToken()));
+
+        // Extended timeout for the upload
+        const uploadClient = createClientWithKs(client.getKs(), 1800000);
+        uploadToken = await executeKalturaRequest(uploadClient, services.uploadToken.upload(uploadToken.id, contentPath));
+
+        entry = await executeKalturaRequest(client, services.media.addContent(entry.id, new objects.UploadedFileTokenResource({token: uploadToken.id})));
     }
 
     return entry;
 };
 
-export const updateMedia = (id, data) => {
+export const updateMedia = (client, id, data) => {
     clearMediaCache();
 
-    return executeKalturaRequest(services.media.update(id, new objects.MediaEntry(data)));
+    return executeKalturaRequest(client, services.media.update(id, new objects.MediaEntry(data)));
 };
 
-export const deleteMedia = (id) => {
+export const deleteMedia = (client, id) => {
     clearMediaCache();
 
-    return executeKalturaRequest(services.media.deleteAction(id));
+    return executeKalturaRequest(client, services.media.deleteAction(id));
 };

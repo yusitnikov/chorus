@@ -1,23 +1,30 @@
 import React, {useState} from "react";
 import {Recorder, RecorderState} from "./Recorder";
-import {Redirect} from "react-router-dom";
-import {translate} from "../locales/translate";
 import {updateMedia} from "../models/Media";
 import {WithLabel} from "./WithLabel";
 import {Error} from "./errors/Error";
-import {addRecentlyCreatedProject} from "../sharedData/recentlyCreatedProjects";
 import {viewProjectUrl} from "../misc/url";
 import {InlineBlocksHolder} from "./InlineBlocksHolder";
+import {createClientWithKs} from "../misc/kalturaClient";
+import {useTranslate} from "../contexts/app";
+import {useRedirect} from "../hooks/useRedirect";
+import {useAddRecentlyCreatedProject} from "../contexts/recentlyCreatedProjects";
 
-export const SourceRecorder = () => {
+export const SourceRecorder = ({ks}) => {
+    const translate = useTranslate();
+    const addRecentlyCreatedProject = useAddRecentlyCreatedProject();
+
     const [state, setState] = useState(RecorderState.destroyed);
     const [entryId, setEntryId] = useState(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
 
-    if (entryId && formSubmitted) {
+    const redirectUrl = entryId && formSubmitted && viewProjectUrl(entryId);
+    if (redirectUrl) {
         addRecentlyCreatedProject(entryId);
-
-        return <Redirect to={viewProjectUrl(entryId)}/>;
+    }
+    useRedirect(redirectUrl);
+    if (redirectUrl) {
+        return null;
     }
 
     const doneRecording = entryId && state === RecorderState.done;
@@ -30,18 +37,16 @@ export const SourceRecorder = () => {
 
             <SourceRecorderInstructions isRecorderReady={state !== RecorderState.destroyed} fulfilledSteps={{1: entryId}}/>
 
-            {!doneRecording && <Recorder onStateChanged={setState} onUploadedEntryIdChanged={setEntryId}/>}
+            {!doneRecording && <Recorder ks={ks} onStateChanged={setState} onUploadedEntryIdChanged={setEntryId}/>}
 
-            {doneRecording && <SourceRecorderForm entryId={entryId} onSubmit={() => setFormSubmitted(true)}/>}
+            {doneRecording && <SourceRecorderForm ks={ks} entryId={entryId} onSubmit={() => setFormSubmitted(true)}/>}
         </>
     );
 };
 
-export const SourceRecorderInstructionsStartButtonTip = ({isRecorderReady}) => isRecorderReady
-    ? translate("Use the recorder below - hit the red button to start.")
-    : translate("Use the recorder below - hit the \"Start\" button to start.");
-
 export const SourceRecorderInstructions = ({isRecorderReady = false, fulfilledSteps = {}}) => {
+    const translate = useTranslate();
+
     const [expanded, setExpanded] = useState(true);
 
     return (
@@ -91,66 +96,95 @@ export const SourceRecorderInstructions = ({isRecorderReady = false, fulfilledSt
     );
 }
 
-export const SourceRecorderInstructionsPreRecordCheckList = () => (
-    <>
-        <li>{translate("Check the camera/audio settings before you start.")}</li>
-        <li className={"mobile-only"}>{translate("Turn your device into the landscape mode.")}</li>
-    </>
-);
+export const SourceRecorderInstructionsStartButtonTip = ({isRecorderReady}) => {
+    const translate = useTranslate();
 
-export const SourceRecorderInstructionsRecordCheckList = () => (
-    <>
-        <li>{translate("Look straight into the camera.")}</li>
-        <li>{translate("Sing loud.")}</li>
-        <li>{translate("Listen to the recording before uploading it, check that everything's all right.")}</li>
-        <li>{translate("Oh, yeah, and don't forget to smile, unless you're recording a very sad song ;)")}</li>
-    </>
-);
+    return isRecorderReady
+        ? translate("Use the recorder below - hit the red button to start.")
+        : translate("Use the recorder below - hit the \"Start\" button to start.");
+}
 
-export const SourceRecorderInstructionsCompilationNote = () => (
-    <>
+export const SourceRecorderInstructionsPreRecordCheckList = () => {
+    const translate = useTranslate();
+
+    return (
+        <>
+            <li>{translate("Check the camera/audio settings before you start.")}</li>
+            <li className={"mobile-only"}>{translate("Turn your device into the landscape mode.")}</li>
+        </>
+    );
+};
+
+export const SourceRecorderInstructionsRecordCheckList = () => {
+    const translate = useTranslate();
+
+    return (
+        <>
+            <li>{translate("Look straight into the camera.")}</li>
+            <li>{translate("Sing loud.")}</li>
+            <li>{translate("Listen to the recording before uploading it, check that everything's all right.")}</li>
+            <li>{translate("Oh, yeah, and don't forget to smile, unless you're recording a very sad song ;)")}</li>
+        </>
+    );
+};
+
+export const SourceRecorderInstructionsCompilationNote = () => {
+    const translate = useTranslate();
+
+    return (
+        <>
+            <div className={"block"}>
+                {translate("All replies and the source recording will be automatically compiled into 1 video of everyone singing together after submitting each reply.")}
+            </div>
+
+            <div className={"block"}>
+                {translate("Note: it may take time to process the videos (seconds or minutes, depending on the video length and quality).")}
+            </div>
+        </>
+    );
+};
+
+const SourceRecorderInstructionsStep = ({step, children, done = false}) => {
+    const translate = useTranslate();
+
+    return (
         <div className={"block"}>
-            {translate("All replies and the source recording will be automatically compiled into 1 video of everyone singing together after submitting each reply.")}
-        </div>
-
-        <div className={"block"}>
-            {translate("Note: it may take time to process the videos (seconds or minutes, depending on the video length and quality).")}
-        </div>
-    </>
-);
-
-const SourceRecorderInstructionsStep = ({step, children, done = false}) => (
-    <div className={"block"}>
-        <WithLabel
-            width={70}
-            bold={true}
-            label={<>
-                {translate("Step %1", step)}&nbsp;
-                {done && <span
-                    className={"absolute"}
-                    style={{
-                        color: "#0c0",
-                        marginTop: -3,
-                    }}>
+            <WithLabel
+                width={70}
+                bold={true}
+                label={<>
+                    {translate("Step %1", step)}&nbsp;
+                    {done && <span
+                        className={"absolute"}
+                        style={{
+                            color: "#0c0",
+                            marginTop: -3,
+                        }}>
                     ✓
                 </span>}
-            </>}
-        >
-            {children}
-        </WithLabel>
-    </div>
-);
+                </>}
+            >
+                {children}
+            </WithLabel>
+        </div>
+    );
+};
 
-const SourceRecorderForm = ({entryId, onSubmit}) => {
+const SourceRecorderForm = ({ks, entryId, onSubmit}) => {
+    const translate = useTranslate();
+
     const [entryName, setEntryName] = useState("");
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [failedToSubmit, setFailedToSubmit] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
         setFailedToSubmit(false);
         setFormSubmitted(true);
-        updateMedia(entryId, {name: entryName})
+
+        const client = createClientWithKs(ks);
+        updateMedia(client, entryId, {name: entryName})
             .then(onSubmit)
             .catch((error) => {
                 console.error("Failed to update the entry", error);

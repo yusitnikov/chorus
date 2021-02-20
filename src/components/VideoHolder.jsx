@@ -1,21 +1,18 @@
 import React, {forwardRef} from "react";
 
-import "./VideoHolder.css";
-
-import {playerAspectRatio} from "../misc/playerAspectRatio";
+import styles from "./VideoHolder.module.css";
 
 export const defaultPlayerWidth = 640;
-export const defaultPlayerHeight = defaultPlayerWidth * playerAspectRatio;
 
 export const VideoHolder = forwardRef(({width = defaultPlayerWidth, children}, ref) => (
     <div
         ref={ref}
-        className={"VideoHolder relative"}
+        className={`${styles.component} relative`}
         style = {{
             width,
         }}
     >
-        <div className={"VideoHolder__Container relative"}>
+        <div className={`${styles.container} relative`}>
             {children}
         </div>
     </div>

@@ -1,16 +1,26 @@
+import {useEffect} from "react";
 import {useEventListener} from "./useEventListener";
-import {KalturaPlayer} from "../misc/externals";
+import {useWindow} from "./useWindow";
 
 const eventName = "kalturaPlayerCreated";
 
-const originalPlayerSetup = KalturaPlayer.setup.bind(KalturaPlayer);
-window.KalturaPlayer = {
-    ...KalturaPlayer,
-    setup: (...args) => {
-        const player = originalPlayerSetup(...args);
-        window.dispatchEvent(new CustomEvent(eventName, {detail: {player}}));
-        return player;
-    },
-};
+export const usePlayerCreatedListener = (handler) => {
+    const wnd = useWindow();
 
-export const usePlayerCreatedListener = (handler) => useEventListener(window, eventName, event => handler(event.detail.player));
+    useEffect(() => {
+        const originalPlayer = window.KalturaPlayer;
+        const originalPlayerSetup = originalPlayer.setup.bind(originalPlayer);
+        window.KalturaPlayer = {
+            ...originalPlayer,
+            setup: (...args) => {
+                const player = originalPlayerSetup(...args);
+                window.dispatchEvent(new CustomEvent(eventName, {detail: {player}}));
+                return player;
+            },
+        };
+
+        return () => window.KalturaPlayer = originalPlayer;
+    }, []);
+
+    return useEventListener(wnd, eventName, event => handler(event.detail.player));
+};

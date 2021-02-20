@@ -1,9 +1,9 @@
-.VideoHolder__Container {
+.container {
     padding-top: 56.25%;
 }
 
 @media (max-width: 659px) {
-    .VideoHolder {
+    .component {
         width: 100% !important;
     }
 }

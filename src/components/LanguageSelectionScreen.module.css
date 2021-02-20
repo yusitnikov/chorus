@@ -1,33 +1,33 @@
-.LanguageSelectionScreen__Attribution {
+.attribution {
     position: absolute;
     right: 20px;
     bottom: 20px;
 }
 
-.LanguageSelectionScreenItem {
+.item {
     display: inline-block;
     margin-right: 50px;
 }
 
-.LanguageSelectionScreenItem:last-child {
+.item:last-child {
     margin-right: 0;
 }
 
-.LanguageSelectionScreenItem__Text {
+.itemText {
     font-size: 30px;
 }
 
 @media (max-width: 659px) {
-    .LanguageSelectionScreenItem {
+    .item {
         margin-right: 30px;
     }
 
-    .LanguageSelectionScreenItem__Flag {
+    .itemFlag {
         width: 60px !important;
         height: 60px !important;
     }
 
-    .LanguageSelectionScreenItem__Text {
+    .itemText {
         font-size: 20px;
     }
 }

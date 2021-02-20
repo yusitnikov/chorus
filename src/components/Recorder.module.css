@@ -1,16 +1,16 @@
-.Recorder__Children {
+.children {
     position: absolute;
     left: 16px;
     top: 16px;
     right: 72px;
 }
 
-.Recorder__Children a.link {
+.children :global(a.link) {
     color: white !important;
 }
 
 @media (max-width: 659px) {
-    .Recorder .xr_btn__download {
+    .component :global(.xr_btn__download) {
         display: none !important;
     }
 }

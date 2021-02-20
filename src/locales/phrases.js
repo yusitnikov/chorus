@@ -400,7 +400,15 @@ export const phrasesById = {
     // endregion
 };
 
-const getPhrasesForLocale = (locale) => Object.fromEntries(Object.entries(phrasesById).map(([phraseId, translationsMap]) => [phraseId, translationsMap[locale]]));
+const getPhrasesForLocale = (locale) => {
+    const result = [];
+
+    for (const [phraseId, translationsMap] of Object.entries(phrasesById)) {
+        result[phraseId] = translationsMap[locale];
+    }
+
+    return result;
+};
 
 export const phrasesByLocale = {
     ru: getPhrasesForLocale("ru"),
