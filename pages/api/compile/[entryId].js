@@ -83,7 +83,9 @@ export async function compileByEntryId(entryId) {
             console.log(`    no concurrent background processes for ${source.id}`);
         }
 
-        const ffmpegCommand = ffmpeg({timeout: 60});
+        const ffmpegCommand = ffmpeg({timeout: 600});
+        ffmpegCommand.on("start", (commandLine) => console.log(`    ${commandLine}`));
+        ffmpegCommand.on("progress", (progress) => console.log(`    Progress: ${progress.percent}% (${progress.frames} frames, ${progress.timemark} seconds)`));
         const ffmpegPromise = abortablePromise(new Promise((resolve, reject) => {
             ffmpegCommand.on("error", ({message}) => reject(message));
             ffmpegCommand.on("end", () => resolve());
@@ -124,11 +126,13 @@ export async function compileByEntryId(entryId) {
 
         ffmpegCommand.complexFilter([
             ...ffmpegScaleFilters,
-            `${ffmpegScaleOutputs}xstack=inputs=${sourcesCount}:layout=${ffmpegLayout.join("|")}[v]`,
+            `${ffmpegScaleOutputs}xstack=inputs=${sourcesCount}:${process.env.XSTACK_FILL_SUPPORTED ? "fill=black:" : ""}layout=${ffmpegLayout.join("|")}[v]`,
             `${ffmpegAudioInputs}amix=inputs=${sourcesCount}:duration=longest[a]`,
         ], ["v", "a"]);
 
         ffmpegCommand.audioChannels(2);
+
+        ffmpegCommand.fps(30);
 
         const outputPath = path.resolve(process.cwd(), "tmp", `${source.id}.mp4`);
         ffmpegCommand.save(outputPath);
