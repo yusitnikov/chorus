@@ -4,9 +4,6 @@ import {abortablePromise} from "../misc/abortablePromise";
 // noinspection JSCheckFunctionSignatures
 const memcached = new Memcached("localhost", {});
 
-// Flush the cache when launching the server, because maybe something became invalid while the server was down
-// memcached.flushAll();
-
 const abortTimeout = 100; // milliseconds
 export const cacheDefaultLifeTime = 86400; // seconds
 
@@ -14,6 +11,8 @@ const promisifyMemcachedCall = (callback, defaultValue = undefined) => abortable
     new Promise((resolve, reject) => callback((error, data) => error ? reject(error) : resolve(data))),
     abortTimeout
 ).catch(() => defaultValue);
+
+export const cacheFlush = () => promisifyMemcachedCall(callback => memcached.flush(callback));
 
 export const cacheGet = async(key) => {
     const result = await promisifyMemcachedCall(callback => memcached.get(key, callback));
